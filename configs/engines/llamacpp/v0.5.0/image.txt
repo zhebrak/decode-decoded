@@ -1,0 +1,2 @@
+ghcr.io/ggml-org/llama.cpp:full-cuda-v0.5.0
+ghcr.io/ggml-org/llama.cpp@sha256:843415d8f917a2eb172b950fc63be7d38342f1f663c14d1adfd1b8c1d7410a5c

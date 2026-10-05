@@ -1,0 +1,38 @@
+[project]
+name = "decode-anatomy"
+version = "0.1.0"
+description = "Where serving engines spend a decode step: GPU-occupied fraction, kernel time and MBU per engine, model size and batch on one H100 SXM"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+# Host side only: the engines run in their own pinned images or environments (servebench.containers), never in this one.
+dependencies = [
+    "pyyaml>=6",
+    "jinja2>=3.1",
+    "pandas>=2.2",
+    "pyarrow>=17",
+]
+
+[project.optional-dependencies]
+report = ["vl-convert-python>=1.7"]  # static SVG/PNG of the page's Vega-Lite specs, for the post
+dataset = ["huggingface_hub>=0.30"]  # raw artifacts to and from the HF dataset
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+# No build system: the harness runs from a clone (its configs, scripts and engine images live in the repository), so
+# uv installs only the dependencies and every entry point runs from the repository root. servebench is packaged when
+# it moves to its own repository.
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["B905"]  # zip(s, s[1:]) pairs are short by design
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

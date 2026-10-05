@@ -1,0 +1,55 @@
+# Quality control: when a measured cell counts, read by anatomy.metrics and anatomy.tidy.
+#
+# The rule that sets the first four from S1, before S2 (anatomy.tidy suggested_tolerances; `anatomy.tidy --calibrate
+# <S1> --out <dir>` writes tolerances-suggested.yaml with the per-engine table behind it). Each statistic is taken over
+# S1's noise block (configs/grid/v1.yaml), valid cells only, per engine and level:
+# - step_noise: the largest between-process SD of a step time;
+# - agree: the largest reading of |differential / tail cadence - 1| (the nearest-rank 99th percentile, which at S1's
+#   18-66 readings per engine and level is the largest reading);
+# - range_ok: the largest reading of the larger of a cell's repeat range and its per-pair differential range;
+# - sentinel_drift: beyond_k x step_noise.
+# The global value is the largest over the engines and levels inside the band below, clamped to the band. An engine and
+# level whose statistic is above its band is a Gate G1 failure for that engine,
+# never a looser tolerance for every engine. The values are copied here with the session that set them (set_from);
+# the others are fixed by the method.
+set_from: S1-20261003           # the S1 session whose noise block set the values below; null: validation's defaults
+overlap_model: corrected # freeze raw/corrected from S1's reference PDL error; duration correction is independent
+bands: #                   [least, most] each set value may take; above "most" for one engine is that engine's failure
+  step_noise: [0.002, 0.01]
+  agree: [0.02, 0.05]
+  range_ok: [0.02, 0.05]
+  sentinel_drift: [0.02, 0.05]
+agree: 0.035              # an independent step estimate (the differential, a server's own) against the cadence
+range_ok: 0.05           # a cell's repeat or per-pair differential range above which it goes to reruns.csv
+overhead_ok: 0.03        # a profiled step against the unprofiled one: the trace consistent with the timing
+sentinel_drift: 0.039     # a sentinel's step against its own session's opening reading (Gate G2: drift within a session)
+busy_invariant: 0.02     # GPU busy time per step with the engine's cores contended, against the graph trace
+hostload_stretch: 0.02   # the least stretch of the step, with the engine's cores contended, that tests busy_invariant
+cpu_throttled: 0         # the share of a cell's measured waves' CPU quota periods that throttled it, above which
+                         # it is rejected (servebench.cgroup: a pod's quota; a VM has none). Any: waves on the cores
+                         # the grid sets aside read exactly 0 (0 of 25,508 periods over 90 waves on the pod), so one
+                         # throttled period means a host not set up as the grid sets it. The L2 wave's bracket is
+                         # AIPerf's whole run, its warm-up included: it can only reject more
+clock_lock: 0.01         # how far the SM clock may sit from the grid's clock_mhz, over the busy samples no slowdown
+                         # touched (servebench.clocks sm_mhz_median_unthrottled), before the lock is judged not to have
+                         # held and the cell is rejected (tidy's clock_problem, the gate's clock item). A power cap
+                         # pulls the clock under the lock by design (0.9 of the busy samples at 14B on the pod, the
+                         # median of every sample 1455 MHz against 1980): reported as a slowdown, never a rejection
+step_noise: 0.01         # a step time's run-to-run SD between processes (validation's largest, 0.62%): what tidy
+                         # holds a trace against the untraced step with; the comparisons' own noise is per cell
+                         # (anatomy.report.derive.Noise, from noise.csv), this only where noise.csv has none
+beyond_k: 3              # a difference counts beyond this many times its noise: the patterns' comparisons, and a host
+                         # stall resolved from zero (about 0.27% of no-difference comparisons cross it)
+noise_floor: 0.002       # the least relative noise any comparison assumes: sources the noise block cannot sample
+                         # (thermal state over hours, one warm-up against another) set a floor under its SDs
+anchor_ratio: [0.7, 1.7] # a trace's step period over the unprofiled step: an anchor firing twice a step reads ~0.5,
+                         # every other step ~2; tracing stretches a host-bound step (+4 to +40% seen), never by 70%
+min_steps: 16            # whole steps a trace window must hold for its per-step numbers to be read
+missed_anchor: 1.5       # a window step holding this many times the median step's activity rows: two steps under
+                         # one anchor (llama.cpp's graph anchor missing the eager step where its KV view grows: 2.0
+                         # in a node trace, hundreds in a graph trace); with each engine's anchor, every validation
+                         # trace's window read 1.06 or less (54 node or eager traces, 90 graph traces)
+card_match: 0.05         # a session whose own ruler did not pass borrows another's calibration only when its own empty
+                         # graph node and bandwidth are within this of the lender's (same GPU and Nsight version): four
+                         # ruler runs on one H100 NVL agreed within 0.2% (node) and 0.6% (bandwidth); an NVL against an
+                         # SXM differs by 10% and 12%; an A100 shared and unlocked spread 9% on its node

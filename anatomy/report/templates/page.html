@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decode-step anatomy</title>
+<meta name="description" content="Where serving engines spend a decode step: how much of it the GPU is busy, kernel time and bandwidth. {{ lede }}.">
+{% if links.site %}<link rel="canonical" href="{{ links.site }}">
+<meta property="og:url" content="{{ links.site }}">{% endif %}
+<meta property="og:type" content="website">
+<meta property="og:title" content="Where a decode step's time goes">
+<meta property="og:description" content="{{ lede }}: how long a decode step takes, how much of it the GPU is busy, and where the rest goes.{% if data.about.dataset_status != 'study' %} ({{ data.about.dataset_status | capitalize }} data.){% endif %}">
+{% if card %}<meta property="og:image" content="{{ card }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ card }}">{% else %}<meta name="twitter:card" content="summary">{% endif %}
+<meta name="author" content="Alexander Zhebrak">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wdth,wght@0,75..100,400..700;1,75..100,400..700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/vega@6.4.0/build/vega.min.js" integrity="sha384-VKdcJr3ZaBIJMbVcopTAI/JEuUkSY6qnwVu9iLuw0DnQ9gQ1JjsfZJhXFQAgNi43" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@6.4.3/build/vega-lite.min.js" integrity="sha384-9/70gNCfOu6G7xXvkdreMfuqAEsoaGJVXV2BN/JLRXkSmcGvnMqtsRx8HZtUWAvI" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@7.3.0/build/vega-embed.min.js" integrity="sha384-Muy1QRxYFeNrA1zShc1KtN4OfipkR/61gt+HWqN57c1Zxu3Oe16TsilsruVVjfKL" crossorigin="anonymous" defer></script>
+<script>try { const t = localStorage.getItem("da-theme"); if (t) document.documentElement.dataset.theme = t } catch (e) {}</script>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --rule: #e1e0d9; --link: #1c5cab; --note: #f0efec;
+  --floor: #4a3aa7; --copy: #d08c00; --excess: #e87ba4; --launch: #008300; --stall: #898781;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --rule: #2c2c2a; --link: #86b6ef; --note: #232321;
+    --floor: #9085e9; --copy: #c48400; --excess: #d55181; --launch: #008300; --stall: #898781;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+  --rule: #2c2c2a; --link: #86b6ef; --note: #232321;
+  --floor: #9085e9; --copy: #c48400; --excess: #d55181; --launch: #008300; --stall: #898781;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--page); }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font-family: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 1.0625rem; line-height: 1.55; font-variation-settings: "wdth" 100;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--link); text-underline-offset: 0.18em; }
+a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--link); outline-offset: 3px; border-radius: 2px;
+}
+.page { max-width: 1120px; margin: 0 auto; padding: 0 16px 6rem; }
+@media (min-width: 760px) { .page { padding: 0 40px 8rem; } }
+.prose { max-width: 66ch; }
+
+header.top {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  padding: 1.25rem 0; border-bottom: 1px solid var(--rule); font-size: 0.9375rem; color: var(--ink-2);
+}
+header.top a { color: var(--ink); text-decoration: none; font-weight: 600; }
+.theme { font: inherit; color: var(--ink-2); background: none; border: 1px solid var(--rule); border-radius: 999px;
+         padding: 0.2rem 0.8rem; cursor: pointer; }
+
+.preview { margin: 1.5rem 0 0; padding: 0.75rem 1rem; background: var(--note); border-left: 3px solid var(--muted);
+           color: var(--ink-2); font-size: 0.9375rem; max-width: 66ch; }
+
+.hero { padding: 3.5rem 0 1rem; }
+h1 {
+  font-size: clamp(2.3rem, 6vw, 4.1rem); line-height: 1.02; font-weight: 600; letter-spacing: -0.015em;
+  font-variation-settings: "wdth" 75; margin: 0 0 1.25rem; max-width: 16ch; text-wrap: balance;
+}
+.lede { font-size: 1.1875rem; color: var(--ink-2); margin: 0 0 2.5rem; max-width: 58ch; }
+.trace { padding: 1.25rem 0 0.5rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.trace-key { display: flex; flex-wrap: wrap; gap: 0.25rem 1.75rem; margin: 0.75rem 0 0; padding: 0;
+             list-style: none; font-size: 0.9375rem; color: var(--ink-2); }
+.trace-key b { color: var(--ink); font-weight: 600; }
+
+section { padding-top: 4.5rem; }
+h2 { font-size: 1.625rem; line-height: 1.2; font-weight: 600; font-variation-settings: "wdth" 87.5;
+     margin: 0 0 0.75rem; letter-spacing: -0.005em; text-wrap: balance; }
+h3 { font-size: 1.0625rem; font-weight: 600; margin: 0 0 0.25rem; }
+p { margin: 0 0 1rem; }
+.caption { font-size: 0.9375rem; color: var(--ink-2); max-width: 66ch; margin-top: 0.5rem; }
+
+.principles { display: grid; gap: 2rem 3rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+              margin: 1.75rem 0 0; padding: 0; list-style: none; }
+.principles li { min-width: 0; padding-top: 0.9rem; border-top: 2px solid var(--ink); }
+.principles .claim { font-size: 1.25rem; line-height: 1.3; font-weight: 600; font-variation-settings: "wdth" 87.5;
+                     margin: 0 0 0.5rem; text-wrap: balance; }
+.principles .evidence { font-size: 0.9375rem; color: var(--ink-2); margin: 0 0 0.4rem; }
+.principles a { font-size: 0.9375rem; }
+.chance { margin-top: 2.25rem; }
+details.cited { margin-top: 0.4rem; font-size: 0.875rem; color: var(--ink-2); }
+details.cited summary { cursor: pointer; color: var(--link); }
+details.cited ul { margin: 0.4rem 0 0; padding: 0; list-style: none; max-height: 14rem; overflow: auto;
+                   font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; margin: 1.25rem 0 1rem; font-size: 0.9375rem;
+            color: var(--ink-2); }
+.controls label { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; min-width: 0; max-width: 100%; }
+select, input { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--rule);
+                border-radius: 6px; padding: 0.3rem 0.5rem; min-width: 0; max-width: 100%; }
+
+.chart { width: 100%; min-width: 0; min-height: 120px; }
+/* minmax(0, 1fr), never 1fr: a track's minimum is otherwise its chart's last drawn width, which keeps a page resized
+   to a phone as wide as the desktop drew it */
+.pair { display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr); }
+.grid4 { display: grid; gap: 1.75rem 2.25rem; grid-template-columns: minmax(0, 1fr); }
+.pair > *, .grid4 > * { min-width: 0; }
+@media (min-width: 860px) { .pair, .grid4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.summary { font-size: 0.9375rem; color: var(--ink-2); max-width: 66ch; margin: 0.5rem 0 0; }
+.skip { position: absolute; left: -9999px; top: 0.5rem; background: var(--surface); color: var(--link);
+        padding: 0.4rem 0.8rem; border: 1px solid var(--rule); border-radius: 6px; z-index: 10; }
+.skip:focus { left: 1rem; }
+.engine-name { font-weight: 600; margin: 0 0 0.25rem; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; margin: 0 0 1rem; padding: 0; list-style: none;
+          font-size: 0.9375rem; color: var(--ink-2); }
+.legend li { display: flex; align-items: center; gap: 0.45rem; }
+.legend li::before { content: ""; width: 0.7rem; height: 0.7rem; border-radius: 2px; background: var(--chip); }
+.terms { display: grid; gap: 1rem 2rem; grid-template-columns: 1fr; margin: 1.5rem 0 0; padding: 0; list-style: none; }
+@media (min-width: 760px) { .terms { grid-template-columns: 1fr 1fr; } }
+.terms li { padding-left: 1.1rem; position: relative; font-size: 0.9375rem; color: var(--ink-2); }
+.terms li::before { content: ""; position: absolute; left: 0; top: 0.45em; width: 0.6rem; height: 0.6rem; border-radius: 2px; }
+.terms li b { color: var(--ink); font-weight: 600; display: block; }
+.terms .t-floor::before { background: var(--floor); }
+.terms .t-copy::before { background: var(--copy); }
+.terms .how { font-weight: 400; color: var(--muted); font-size: 0.875rem; margin-left: 0.35rem; }
+.terms .t-excess::before { background: var(--excess); }
+.terms .t-launch::before { background: var(--launch); }
+.terms .t-stall::before { background: var(--stall); }
+
+.empty { color: var(--muted); font-size: 0.9375rem; padding: 1rem 0; }
+.inspect { margin-top: 0.5rem; max-width: 66ch; }
+.inspect h3 { margin: 1.25rem 0 0.35rem; }
+.inspect .status { font-weight: 600; }
+.inspect .status.no { color: var(--ink-2); }
+.bar { display: flex; height: 1.1rem; border-radius: 3px; overflow: hidden; gap: 2px; background: var(--rule); }
+.bar span { min-width: 2px; }
+.inspect ul { margin: 0.25rem 0 0; padding-left: 1.1rem; }
+.inspect code { font-size: 0.875rem; overflow-wrap: anywhere; }
+.inspect button { font: inherit; font-size: 0.875rem; color: var(--link); background: none; border: 1px solid var(--rule);
+                  border-radius: 6px; padding: 0.15rem 0.6rem; cursor: pointer; margin-left: 0.4rem; }
+details.cells { margin-top: 1rem; }
+details.cells summary { cursor: pointer; color: var(--link); }
+table { border-collapse: collapse; width: 100%; font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+.table-wrap { overflow-x: auto; margin-top: 1rem; border-top: 1px solid var(--rule); }
+th, td { text-align: right; padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.table-wrap th:last-child, .table-wrap td:last-child { white-space: normal; min-width: 18rem; text-align: left; }
+th { color: var(--ink-2); font-weight: 600; position: sticky; top: 0; background: var(--page); }
+th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+dl.versions { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1.5rem; margin: 1rem 0; }
+dl.versions dt { color: var(--ink-2); }
+dl.versions dd { margin: 0; }
+footer { margin-top: 5rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); color: var(--ink-2); font-size: 0.9375rem; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the results</a>
+<div class="page">
+<header class="top">
+  <a href="https://zhebrak.io">zhebrak.io</a>
+  <span>Updated {{ data.about.generated }}</span>
+  <button class="theme" type="button" id="theme" aria-label="Switch between light and dark">Dark</button>
+</header>
+
+<main id="main">
+{% if data.about.dataset_status == "preview" %}
+<p class="preview" role="note">Layout preview. Every number on this page comes from a toy model, not a measurement;
+the measured grid replaces it after the first GPU sessions.</p>
+{% elif data.about.dataset_status == "validation" %}
+<p class="preview" role="note">Validation preview. These are real measurements of {{ data.about.models | join(", ") }}
+on {{ data.about.cards | join(", ") }}, but not the study's: {{ data.about.not_study | join("; ") }}. The study's cells
+replace these.</p>
+{% endif %}
+
+<div class="hero">
+  <h1>Where a decode step's time goes</h1>
+  <p class="lede">{{ lede }}. For every combination: how long a decode step takes, how much of it the GPU spends
+  working, and where the rest goes.</p>
+  <div class="trace">
+    <div class="chart" id="c-trace" role="img" aria-label="GPU activity over three decode steps of Qwen3-0.6B at batch 1, one row per engine"></div>
+    <ul class="trace-key">
+      <li><b>Blocks</b> kernels running on the GPU</li>
+      <li><b>Thin seams between blocks</b> where one kernel ends and the next begins</li>
+      <li><b>The gap before the next step</b> the GPU waiting for the host, here mostly for the tracer: with every
+      kernel traced the host falls behind the GPU, which it does not in an untraced step</li>
+    </ul>
+  </div>
+  <p class="caption">Three typical decode steps of Qwen3-0.6B at batch 1 (each within 15% of its trace's median step),
+  on one microsecond axis{% if data.trace_stretch is not none %}, cut from each engine's trace of every kernel. Tracing
+  that finely stretches a step, and stretches each engine's differently: these ran
+  {{ "%.0f"|format(100 * data.trace_stretch) }}% longer than untraced steps, and the idle before each next step is
+  mostly that stretch. Untraced, every engine keeps the GPU busy 97% of this step (the map below), so the picture shows
+  where a step's kernels sit and how they are packed, not which engine is faster or how long the GPU waits; the
+  untraced step times below do that{% endif %}.</p>
+</div>
+
+{% set k = data.pattern_stats.k %}
+{% set times = {2: "twice", 3: "three times", 4: "four times", 5: "five times"}.get(k | int, "%g times" | format(k)) %}
+{% set titles = {"crossover": "When the GPU stops waiting", "anatomy": "Anatomy of a step",
+                 "engines": "Engines side by side", "mitigations": "What each mitigation buys",
+                 "stack": "Where in the stack", "calculator": "Another GPU: a scenario"} %}
+{% if data.principles %}
+<section id="principles" aria-labelledby="h-principles">
+  <h2 id="h-principles">What the measurements show</h2>
+  <ul class="principles">
+    {% for p in data.principles %}
+    <li>
+      <p class="claim">{{ p.claim }}</p>
+      <p class="evidence">{{ p.evidence }}</p>
+      <a href="#{{ p.section }}">{{ titles[p.section] }}</a>
+      {% if p.cells %}<details class="cited"><summary>The {{ p.cells | length }} cell{{ "s" if p.cells | length > 1 }} it
+        rests on</summary>
+        {% set inspectable = data.explorer | map(attribute="id") | list %}
+        <ul>{% for c in p.cells %}<li>{% if c in inspectable %}<a href="#cell:{{ c }}">{{ c }}</a>{% else %}{{ c }}{% endif %}{% if data.evidence[c] %} (<a href="{{ data.evidence[c] }}">raw files</a>){% endif %}</li>{% endfor %}</ul>
+      </details>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="caption chance">A difference counts only when it is more than {{ times }} the run-to-run noise between
+  separate processes, measured on cells like it in the first session and checked on each later session's host.
+  Each principle names the cells it rests on, each linked to its raw traces and logs; every one is rebuilt from that
+  data with <code>uv run python -m anatomy.tidy &lt;sessions&gt; --calibrate &lt;S1&gt; --out results</code> and
+  <code>uv run python -m anatomy.report.patterns results/cells.parquet</code>. Of the {{ data.pattern_stats.comparisons }} comparisons behind these, chance
+  alone would put {% if data.pattern_stats.expected_by_chance >= 0.5 %}about
+  {{ "%.0f"|format(data.pattern_stats.expected_by_chance) }}{% else %}fewer than one{% endif %} over that line.{% set aa = data.pattern_stats.aa %}{% if aa %}
+  Checked on pairs that differ by nothing, each judged by noise measured without it:{% if aa.processes %}
+  {{ aa.processes.beyond }} of {{ aa.processes.pairs }} pairs of the first session's repeated processes{% endif %}{% if aa.processes and aa.sentinels %} and{% endif %}{% if aa.sentinels %}
+  {{ aa.sentinels.beyond }} of {{ aa.sentinels.pairs }} sentinel cells read at a session's end against its start{% endif %}
+  crossed it.{% endif %} Every difference, with the cells it rests
+  on: <a href="data/patterns.json">patterns.json</a>.</p>
+</section>
+{% endif %}
+
+<section id="crossover" aria-labelledby="h-crossover">
+  <h2 id="h-crossover">{{ titles.crossover }}</h2>
+  <p class="prose">The share of each step the GPU has work queued, against model size. Below the line at 90%, the
+  engine's host side (scheduling, input preparation, launches, sampling) holds the step back.</p>
+  <div class="pair">
+    <div class="chart" id="c-occ1" role="img" aria-label="GPU busy share of the step against model size at batch 1" aria-describedby="s-occ1"></div>
+    <p class="summary" id="s-occ1"></p>
+    <div class="chart" id="c-occ64" role="img" aria-label="GPU busy share of the step against model size at batch 64" aria-describedby="s-occ64"></div>
+    <p class="summary" id="s-occ64"></p>
+  </div>
+  <h3 style="margin-top:2.5rem">The 90% frontier</h3>
+  <p class="prose caption">For each model, the batch width from which the GPU stays at least 90% busy. A lower line
+  means the engine gets out of the GPU's way sooner. A hollow point is only an upper bound: the batch below it was not
+  measured, or its measurement was rejected.</p>
+  <div class="chart" id="c-frontier" role="img" aria-label="Batch at which each engine keeps the GPU 90% busy, by model size" aria-describedby="s-frontier"></div>
+    <p class="summary" id="s-frontier"></p>
+</section>
+
+<section id="anatomy" aria-labelledby="h-anatomy">
+  <h2 id="h-anatomy">{{ titles.anatomy }}</h2>
+  <p class="prose">Every step split into five parts that add up to its length, for each model at one batch width.</p>
+  <div class="controls">
+    <label>Batch <select id="a-batch"></select></label>
+  </div>
+  <ul class="legend">
+    <li style="--chip: var(--floor)">Bandwidth floor</li><li style="--chip: var(--copy)">Copies</li>
+    <li style="--chip: var(--excess)">Kernel excess</li><li style="--chip: var(--launch)">Launch cost</li>
+    <li style="--chip: var(--stall)">Host stall</li>
+  </ul>
+  <div class="grid4">
+    {% for key, name in engine_names.items() %}
+    <div><p class="engine-name">{{ name }}</p>
+      <div class="chart" id="c-anatomy-{{ key }}" aria-describedby="s-anatomy-{{ key }}" role="img" aria-label="{{ name }}: each model's step split into bandwidth floor, copies, kernel excess, launch cost and host stall"></div>
+      <p class="summary" id="s-anatomy-{{ key }}"></p></div>
+    {% endfor %}
+  </div>
+  <p class="caption" id="c-anatomy-note"></p>
+  <ul class="terms">
+    <li class="t-floor"><b>Bandwidth floor <span class="how">modelled</span></b>The step's bytes (weights once, every
+      sequence's KV cache) over the card's measured streaming bandwidth (the fastest of a read, a copy and a GEMV at
+      the locked clock). A reference for this card, not a physical limit for every access pattern.</li>
+    <li class="t-copy"><b>Copies <span class="how">measured</span></b>Memory the GPU copies or sets outside any
+      kernel: logits copied to the host for sampling, inputs copied in.</li>
+    <li class="t-excess"><b>Kernel excess <span class="how">what remains</span></b>Kernel time beyond the floor and
+      the launch cost: kernels that do not stream memory at full speed.</li>
+    <li class="t-launch"><b>Launch cost <span class="how">modelled</span></b>What starting each kernel costs the GPU,
+      even inside a CUDA graph: the kernels per step times what a graph node costs on this card (less what a launch
+      hidden under the kernel before it saves), plus the gaps the traces show. What a megakernel removes.</li>
+    <li class="t-stall"><b>Host stall <span class="how">measured</span></b>Time the GPU has nothing to do because the
+      host has not sent the next step yet.</li>
+  </ul>
+  <p class="caption">Modelled parts rest on a model (bytes per step; kernels times the node cost the ruler measured),
+  so they carry its assumptions; the measured ones come straight from the traces. The parts add up by construction,
+  which checks the arithmetic, not the causes: switching one mechanism off at a time (below) is what tests them.</p>
+</section>
+
+<section id="engines" aria-labelledby="h-engines">
+  <h2 id="h-engines">{{ titles.engines }}</h2>
+  <p class="prose">Each engine's step over the fastest engine's for the same model and batch, like with like: engine
+  APIs against engine APIs, servers against servers. A hollow point is within {{ times }} the run-to-run noise of the
+  fastest.</p>
+  <div class="controls">
+    <label>Level <select id="e-level"></select></label>
+    <label>Batch <select id="e-batch"></select></label>
+  </div>
+  <div class="chart" id="c-engines" role="img" aria-label="Each engine's step over the fastest engine's, by model size" aria-describedby="s-engines"></div>
+    <p class="summary" id="s-engines"></p>
+</section>
+
+<section id="mitigations" aria-labelledby="h-mitigations">
+  <h2 id="h-mitigations">{{ titles.mitigations }}</h2>
+  <p class="prose">Every engine hides host work in its own ways. Each row changes one of them and leaves the rest on;
+  each point is one engine, model and batch, its step over the same cell's with everything on. Hollow points are
+  within noise; hover for how busy the GPU was both ways. A row marked across sessions sets the cell against defaults
+  measured in another session, so drift between the two is part of its difference.</p>
+  <div class="chart" id="c-mitigations" role="img" aria-label="Step with one mitigation changed over the step with all on, per mitigation" aria-describedby="s-mitigations"></div>
+    <p class="summary" id="s-mitigations"></p>
+</section>
+
+<section id="stack" aria-labelledby="h-stack">
+  <h2 id="h-stack">{{ titles.stack }}</h2>
+  <p class="prose">The same cell measured at other depths, over its step at the engine API: below it, a runner that
+  drives the forward pass directly; above it, the OpenAI-compatible server with streaming. The runner is not always a
+  floor under the engine: SGLang's runner has no overlap scheduler and waits for every step, so host and GPU time add
+  up there that the engine overlaps.</p>
+  <div class="chart" id="c-stack" role="img" aria-label="Step at the runner and the server over the step at the engine API, per engine" aria-describedby="s-stack"></div>
+    <p class="summary" id="s-stack"></p>
+  <p class="caption">vLLM and TensorRT-LLM ship no runner benchmark: the runner row is SGLang's.</p>
+</section>
+
+<section id="calculator" aria-labelledby="h-calculator">
+  <h2 id="h-calculator">{{ titles.calculator }}</h2>
+  <p class="prose">A scenario, not a measurement. Each engine's host cost per step is fitted from the measured cells
+  (a fixed part plus a part per sequence); with the bytes' share of the GPU's time scaled by another card's memory
+  bandwidth, and everything else held as measured here (the same host CPU, kernels, graph-node cost and clocks), it
+  shows where the crossover would land. Another card changes more than its bandwidth, and no measurement on one has
+  tested this yet: read it as a what-if with the band of the fit's own uncertainty, not as a forecast.</p>
+  <div class="controls" id="c-controls">
+    <label>Engine <select id="c-engine"></select></label>
+    <label>Card <select id="c-card"></select></label>
+    <label>Batch <select id="c-batch"></select></label>
+  </div>
+  <div class="chart" id="c-calc" role="img" aria-label="The scenario's GPU busy share against model size on the chosen card"></div>
+  <p class="caption" id="c-calc-note"></p>
+</section>
+
+<section id="map" aria-labelledby="h-map">
+  <h2 id="h-map">Every cell</h2>
+  <p class="prose">Every model and batch width at each engine's default settings, one panel per engine. An outlined
+  cell marked × was run and not accepted: hover for why, or open it in the cell explorer below.</p>
+  <div class="controls">
+    <label>Measure
+      <select id="metric">
+        <option value="occupied">GPU busy</option>
+        <option value="sol">Speed of light (bandwidth floor over step time)</option>
+        <option value="mbu">Bandwidth used, of what this card achieves</option>
+        <option value="step_ms">Step time</option>
+      </select>
+    </label>
+  </div>
+  <div class="grid4">
+    {% for key, name in engine_names.items() %}
+    <div><p class="engine-name">{{ name }} {{ versions[key] }}</p>
+      <div class="chart" id="c-map-{{ key }}" aria-describedby="s-map-{{ key }}" role="img" aria-label="{{ name }}: the chosen measure by model and batch"></div>
+      <p class="summary" id="s-map-{{ key }}"></p></div>
+    {% endfor %}
+  </div>
+  <details class="cells">
+    <summary>The same cells as a table ({{ table | length }} rows)</summary>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Engine</th><th scope="col">Model</th><th scope="col">Batch</th>
+          <th scope="col">Step (ms)</th><th scope="col">GPU busy</th><th scope="col">Speed of light</th>
+          <th scope="col">Bandwidth used</th><th scope="col">Floor (ms)</th><th scope="col">Copies</th><th scope="col">Kernel excess</th>
+          <th scope="col">Launch</th><th scope="col">Host stall</th></tr></thead>
+        <tbody>
+        {% for r in table %}
+          <tr><td>{{ engine_names[r.engine] }}</td><td>{{ r.model.split('/')[-1] }}</td><td>{{ r.batch }}</td>
+            <td>{{ '%.3f'|format(r.step_ms) if r.step_ms is not none else '' }}</td>
+            <td>{{ '%.0f%%'|format(100 * r.occupied) if r.occupied is not none else '' }}</td>
+            <td>{{ '%.0f%%'|format(100 * r.sol) if r.sol is not none else '' }}</td>
+            <td>{{ '%.0f%%'|format(100 * r.mbu) if r.mbu is not none else '' }}</td>
+            <td>{{ '%.3f'|format(r.floor_ms) if r.floor_ms is not none else '' }}</td>
+            <td>{{ '%.3f'|format(r.copy_ms) if r.copy_ms is not none else '' }}</td>
+            <td>{{ '%.3f'|format(r.kernel_exc_ms) if r.kernel_exc_ms is not none else '' }}</td>
+            <td>{{ '%.3f'|format(r.launch_ms) if r.launch_ms is not none else '' }}</td>
+            <td>{{ '%.3f'|format(r.host_stall_ms) if r.host_stall_ms is not none else '' }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+</section>
+
+<section id="cell" aria-labelledby="h-cell">
+  <h2 id="h-cell">One cell, inspected</h2>
+  <p class="prose">Any engine, model and batch at its default settings, accepted or not: what was measured, every
+  check it passed or failed, where its raw files are, and how to measure it again. The address keeps the choice, so a
+  cell can be linked.</p>
+  <div class="controls">
+    <label>Engine <select id="x-engine"></select></label>
+    <label>Model <select id="x-model"></select></label>
+    <label>Batch <select id="x-batch"></select></label>
+  </div>
+  <div class="inspect" id="x-cell" aria-live="polite"></div>
+</section>
+
+<section id="method" aria-labelledby="h-method">
+  <h2 id="h-method">How it is measured</h2>
+  <div class="prose">
+    <p>Step time comes from unprofiled runs: every output token is timestamped as it arrives, and the step is the time
+    per token while all sequences of a batch are decoding together. It must agree within 3% with an independent
+    estimate from two runs that differ only in output length, each timed from every stream's first token to its last
+    and compared over the same tokens.</p>
+    <p>Repeats inside one process need not bound the spread between separate processes of the same cell, so the first
+    session runs cells of every engine (two model sizes, three batch widths, one setting that leaves the GPU waiting on
+    the host) as separate processes at its start and end. A difference between cells counts only beyond {{ times }}
+    that noise, and cells compared with each other run back to back in one session.</p>
+    <p>GPU busy is the share of a step the GPU has work in flight (kernels, copies, graph launches), from Nsight
+    Systems: not CUDA's occupancy (warps resident per multiprocessor), and not nvidia-smi's utilisation, which counts
+    any time a kernel ran. Busy time and kernel time come from separate captures of the same cells: busy time from a
+    low-overhead trace that sees each CUDA graph as one block, kernel time from a trace that sees every kernel inside
+    the graphs. Tracing slows the host but not the GPU's work, so the busy share is the GPU's busy time per step in
+    the trace over the step time of the unprofiled run; a trace whose GPU work does not fit in that step is
+    rejected.</p>
+    <p>The server's step against the engine API's is the whole stack's difference (HTTP, streaming, detokenising,
+    the server's own scheduling), not the cost of HTTP alone.</p>
+    <p>Before any engine was measured, the trace parser was checked against a synthetic workload with a known busy
+    fraction, and the card's achievable bandwidth was measured, so "speed of light" means this card, not the
+    datasheet.</p>
+    <h3>What checking the harness changed</h3>
+    <ul>
+      <li>CUPTI counts a kernel's launch inside its duration, so the gaps between kernels read near zero and launch
+      cost hid in kernel excess: the launch term counts kernels at the card's measured graph-node cost.</li>
+      <li>Tracing stretches a host-bound step (SGLang's batch 1 by 4%), so the busy share is busy time over the
+      unprofiled step, and contending the host's cores tests that the GPU's work did not move.</li>
+      <li>A graph launch that missed the step where an engine's KV view grows, and a prefill graph that outnumbered
+      decode's at 256 sequences: each engine's step is anchored on its own once-a-step event, and a missed one rejects
+      the window.</li>
+      <li>SGLang admitted 255 of 256 sequences, its chunked request counted twice: a batch that never ran whole is
+      rejected and says so.</li>
+    </ul>
+    <p>Every failure the harness now catches, and what catches it, is in the repository's validation record.</p>
+    {% if data.agreement %}<p>Equivalent work: every cell's engine was given the same eight prompts' token ids and
+    asked for 32 greedy tokens. {{ data.agreement.identity[0] }} of the {{ data.agreement.identity[1] }} settings that
+    change no arithmetic gave their defaults' very tokens{% if data.agreement.median_first_divergence %}; engines
+    parted, as bf16 kernels may, after {{ "%.0f"|format(data.agreement.median_first_divergence[0]) }} to
+    {{ "%.0f"|format(data.agreement.median_first_divergence[1]) }} tokens in the median{% endif %}{% if data.agreement.flagged %}, and {{ data.agreement.flagged | join(", ") }} parted from every
+    other at once, which the comparisons of its cells must be read against{% endif %}{% if data.agreement.probe_errors %};
+    the probe failed in {{ data.agreement.probe_errors }} unit{{ "s" if data.agreement.probe_errors > 1 }}{% endif %} (<a href="data/agreement.csv">agreement.csv</a>).</p>{% endif %}
+  </div>
+  <dl class="versions">
+    {% for key, name in engine_names.items() %}<dt>{{ name }}</dt><dd>{{ versions[key] }}</dd>{% endfor %}
+    <dt>GPU</dt><dd>{{ data.about.cards | join(", ") or "NVIDIA H100 80GB HBM3" }}</dd>
+    <dt>Data</dt><dd>{{ data.about.dataset_status }}{% if data.about.measured %}, measured {{ data.about.measured.first }}{% if data.about.measured.last != data.about.measured.first %} to {{ data.about.measured.last }}{% endif %}{% endif %}, built from {{ data.about.source_commit }}</dd>
+  </dl>
+  {% if data.changelog %}
+  <h3 style="margin-top:2rem">Versions measured</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>{% for k in data.changelog[0].keys() %}<th scope="col">{{ k }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for row in data.changelog %}<tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% endif %}
+  <p class="caption">The data: <a href="data/cells.csv">cells.csv</a> (every cell, every column),
+  <a href="data/patterns.json">patterns.json</a> (every difference beyond noise) and <a href="data/page.json">page.json</a>
+  (what this page draws), each headed by what the data are.{% if links.dataset %} Raw traces live in
+  <a href="{{ links.dataset }}">the dataset</a>.{% endif %}</p>
+</section>
+
+</main>
+
+<footer>
+  <p>{% if links.author %}<a href="{{ links.author }}">Alexander Zhebrak</a>.{% else %}Alexander Zhebrak.{% endif %}
+  {% if links.repository %}Code, configs and every flag: <a href="{{ links.repository }}">the repository</a>.{% endif %}
+  {% if links.dataset %}Every raw trace and log: <a href="{{ links.dataset }}">the dataset</a>.{% endif %}
+  {% if links.issues %}Corrections, from engine maintainers above all, are welcome as
+  <a href="{{ links.issues }}">issues</a> and are recorded in the changelog.{% endif %} Code MIT, data CC BY 4.0, the
+  typeface (Instrument Sans) OFL.</p>
+</footer>
+</div>
+
+<script type="application/json" id="page-data">{{ data|tojson }}</script>
+<script>
+(() => {
+  const D = JSON.parse(document.getElementById("page-data").textContent);
+  const root = document.documentElement;
+  const dark = matchMedia("(prefers-color-scheme: dark)");
+  const theme = () => root.dataset.theme || (dark.matches ? "dark" : "light");
+  const head = D.headline;  // anatomy.metrics.headline_rows: accepted defaults cells at each engine's headline level
+  const short = m => m.replace(/^.*\//, "");
+  const views = {};
+
+  // Every number below was computed in Python (anatomy.report.derive, anatomy.fit): this script only filters rows and
+  // draws them, so the page cannot drift from the tested code.
+
+  const queue = {};  // a chart's renders run in turn: two quick control changes never leave the older one on screen
+  function draw(id, key, rows, patch) {
+    const el = document.getElementById(id);
+    if (!el || !window.vegaEmbed) return;
+    queue[id] = (queue[id] || Promise.resolve()).then(() => {
+      if (views[id]) { views[id].finalize(); delete views[id]; }
+      if (!rows.length) { el.replaceChildren(Object.assign(document.createElement("p"), {className: "empty",
+        textContent: "No cell measured for this choice."})); return; }
+      const spec = structuredClone(D.specs[theme()][key]);
+      spec.data = {values: rows};
+      const m = spec.usermeta;  // a chart of rows: its height from its rows (anatomy.report.charts.sized)
+      if (m && m.row_step) spec.height = m.row_step * Math.max(1, new Set(rows.map(r => m.rows_by.map(f => r[f]).join("|"))).size);
+      if (patch) patch(spec);
+      return vegaEmbed(el, spec, {renderer: "svg", actions: false}).then(r => { views[id] = r.view; });
+    }).catch(e => console.error(e));
+  }
+
+  function fill(select, values, label, initial) {
+    const pick = values.map(String).includes(String(initial)) ? initial : values[0];
+    select.replaceChildren(...values.map(v => Object.assign(document.createElement("option"),
+      {value: String(v), textContent: label ? label(v) : String(v), selected: String(v) === String(pick)})));
+  }
+  const uniq = xs => [...new Set(xs)];
+  const batches = rows => uniq(rows.map(r => r.batch)).sort((a, b) => a - b);
+  const val = id => document.getElementById(id).value;
+  const LEVEL = {L1: "Engine API", L2: "Server"};
+
+  function setup() {
+    fill(document.getElementById("a-batch"), batches(head), null, 1);
+    fill(document.getElementById("e-level"), uniq(D.engine_gaps.map(g => g.level)).sort(), l => LEVEL[l], "L1");
+    fill(document.getElementById("e-batch"), batches(D.engine_gaps), null, 1);
+    const fitted = Object.keys(D.fits).filter(e => D.fits[e].h0_ms != null && !D.fits[e].unphysical);  // anatomy.fit
+    fill(document.getElementById("c-engine"), fitted, e => D.engine_names[e], "vllm");
+    fill(document.getElementById("c-card"), Object.keys(D.cards), null, "B200");
+    fill(document.getElementById("c-batch"), batches(D.predictions), null, 1);
+    for (const id of ["metric", "a-batch", "e-level", "e-batch", "c-engine", "c-card", "c-batch"])
+      document.getElementById(id).addEventListener("change", render);
+  }
+
+  const PARTS = [["floor", "Bandwidth floor", "--floor"], ["copy", "Copies", "--copy"],
+                 ["kernel_exc", "Kernel excess", "--excess"], ["launch", "Launch cost", "--launch"],
+                 ["host_stall", "Host stall", "--stall"]];
+  const X = D.explorer || [];
+  const el = (tag, props, ...kids) => { const e = Object.assign(document.createElement(tag), props || {});
+    e.append(...kids.filter(k => k != null)); return e; };
+
+  function inspect() {  // one cell: what was measured and how far to trust it, all from the page data
+    const e = val("x-engine"), m = val("x-model"), b = Number(val("x-batch"));
+    const c = X.find(x => x.engine === e && x.model === m && x.batch === b);
+    const box = document.getElementById("x-cell");
+    box.dataset.cell = c ? c.id : "";
+    if (!c) { box.replaceChildren(el("p", {className: "empty", textContent: "No cell measured for this choice."})); return; }
+    try { history.replaceState(null, "", "#cell:" + c.id); } catch (err) {}
+    const ms = x => x == null ? "–" : x.toFixed(3) + " ms";
+    const total = PARTS.reduce((t, [k]) => t + Math.max(c.parts[k] || 0, 0), 0);
+    const bar = el("div", {className: "bar", role: "img", ariaLabel: "The step's five parts"},
+      ...PARTS.filter(([k]) => c.parts[k] != null).map(([k, name, v]) => el("span",
+        {title: `${name}: ${ms(c.parts[k])}`, style: `flex: ${Math.max(c.parts[k], 0) / (total || 1)}; background: var(${v})`})));
+    const parts = el("ul", null, ...PARTS.filter(([k]) => c.parts[k] != null)
+      .map(([k, name]) => el("li", {textContent: `${name}: ${ms(c.parts[k])} (${(100 * c.parts[k] / c.step_ms).toFixed(1)}%)`})));
+    const classes = Object.entries(c.classes_ms).sort((a, b) => b[1] - a[1]);
+    const links = Object.entries(c.sources).map(([cap, url]) => /^https?:/.test(url || "")
+      ? el("li", null, el("a", {href: url, textContent: `${cap}: raw files`})) : el("li", {textContent: `${cap}: ${url}`}));
+    const copy = el("button", {type: "button", textContent: "Copy"});
+    copy.addEventListener("click", () => navigator.clipboard.writeText(c.measure).then(
+      () => { copy.textContent = "Copied"; }, () => { copy.textContent = "Select it"; }));
+    box.replaceChildren(
+      el("p", {className: "status" + (c.accepted ? "" : " no"), textContent: c.accepted
+        ? `Accepted: ${c.step_ms.toFixed(3)} ms a step, the GPU busy ${(100 * c.occupied).toFixed(0)}% of it.`
+        : `Not accepted: ${c.rejection}.`}),
+      ...(c.parts.floor != null ? [el("h3", {textContent: "Where the step goes"}), bar, parts] : []),
+      ...(classes.length ? [el("h3", {textContent: "Kernel time by class, a step"}),
+        el("ul", null, ...classes.map(([k, v]) => el("li", {textContent: `${k}: ${ms(v)}`})))] : []),
+      el("h3", {textContent: "Checks"}),
+      el("ul", null, ...c.checks.map(([label, v]) => el("li", {textContent: `${label}: ${v}`}))),
+      el("h3", {textContent: "Evidence"}), el("ul", null, ...links, el("li", {textContent: `id ${c.id}`})),
+      el("h3", {textContent: "Measure it again"}), el("p", null, el("code", {textContent: c.measure}), copy));
+    if (D.cell_strips) cellStrip(c);
+  }
+
+  let stripsFile;  // cell-strips.json (anatomy.strip.cell_strips): fetched once, the first time a cell is opened
+  function cellStrip(c) {
+    stripsFile = stripsFile || fetch("data/cell-strips.json").then(r => r.ok ? r.json() : null).catch(() => null);
+    stripsFile.then(S => {
+      const st = S && S.cells[c.id];
+      const box = document.getElementById("x-cell");
+      if (!st || !box.isConnected || box.dataset.cell !== c.id) return;  // another cell was picked meanwhile
+      const ticks = st.ticks.map((t, i) => ({kind: "step", start: t, step: i, engine: c.engine}));
+      const rows = [...ticks, ...st.k.map(([a, b, k]) => ({kind: "kernel", start: a, end: b, engine: c.engine,
+        class: S.classes[k], step: ticks.filter(t => t.start <= a).length - 1}))];
+      const stretch = st.step_ms ? st.traced_step_ms / st.step_ms - 1 : null;
+      const chart = el("div", {className: "chart", id: "x-strip", role: "img",
+        ariaLabel: `Two decode steps of ${c.id} from its node trace`});
+      box.insertBefore(el("div", null, el("h3", {textContent: "Two steps of its trace"}), chart,
+        el("p", {className: "caption", textContent: "Blocks are kernels, the gap before the next tick is the GPU " +
+          "waiting for the host; cut from the node trace" + (stretch == null ? "." :
+          `, whose steps ran ${(100 * stretch).toFixed(0)}% longer than untraced ones.`)})), box.children[1] || null);
+      draw("x-strip", "trace", rows, spec => { spec.height = 70; });
+    });
+  }
+
+  function explorerSetup() {
+    if (!X.length) { document.getElementById("cell").hidden = true; return; }
+    const wanted = decodeURIComponent((location.hash.match(/^#cell:(.+)$/) || [])[1] || "");
+    const first = X.find(x => x.id === wanted) || X.find(x => x.accepted) || X[0];
+    const pick = () => {
+      const e = val("x-engine");
+      fill(document.getElementById("x-model"), uniq(X.filter(x => x.engine === e).map(x => x.model)), null,
+           val("x-model") || first.model);
+      fill(document.getElementById("x-batch"), batches(X.filter(x => x.engine === e && x.model === val("x-model"))),
+           null, val("x-batch") || first.batch);
+    };
+    fill(document.getElementById("x-engine"), uniq(X.map(x => x.engine)), x => D.engine_names[x], first.engine);
+    document.getElementById("x-model").value = first.model;
+    pick();
+    document.getElementById("x-engine").addEventListener("change", () => { pick(); inspect(); });
+    document.getElementById("x-model").addEventListener("change", () => { pick(); inspect(); });
+    document.getElementById("x-batch").addEventListener("change", inspect);
+    window.addEventListener("hashchange", () => {  // a claim card's cited cell: open it here
+      const id = decodeURIComponent((location.hash.match(/^#cell:(.+)$/) || [])[1] || "");
+      const c = X.find(x => x.id === id);
+      if (!c) return;
+      document.getElementById("x-engine").value = c.engine;
+      document.getElementById("x-model").value = c.model;
+      pick();
+      document.getElementById("x-batch").value = String(c.batch);
+      inspect();
+      document.getElementById("cell").scrollIntoView();
+    });
+    inspect();
+  }
+
+  function predict(engine, card, batch) {  // anatomy.fit.predict's rows (page data), beside the measured ones
+    const pred = D.predictions.filter(p => p.engine === engine && p.card === card && p.batch === batch);
+    const models = new Set(pred.map(p => p.model));
+    return [...head.filter(r => r.engine === engine && r.batch === batch && models.has(r.model))
+              .map(r => ({...r, series: "Measured on H100 SXM"})),
+            ...pred.map(p => ({...p, series: "Predicted, " + card}))];
+  }
+
+  function say(id, text) {  // the chart's sentence for what is on screen, written in Python (patterns.summaries)
+    const el = document.getElementById(id);
+    if (el) el.textContent = text || "";
+  }
+
+  function render() {
+    const S = D.summaries || {};
+    say("s-occ1", S.occ1); say("s-occ64", S.occ64); say("s-frontier", S.frontier);
+    say("s-mitigations", S.mitigations); say("s-stack", S.stack);
+    say("s-engines", (S.engines || {})[val("e-level") + "/" + val("e-batch")]);
+    for (const e of Object.keys(D.engine_names)) {
+      say("s-anatomy-" + e, ((S.anatomy || {})[val("a-batch")] || {})[e]);
+      say("s-map-" + e, ((S.map || {})[val("metric")] || {})[e]);
+    }
+    draw("c-trace", "trace", D.trace);
+    draw("c-occ1", "occ_b1", D.occupancy[1]);
+    draw("c-occ64", "occ_b64", D.occupancy[64]);
+    draw("c-frontier", "frontier", D.frontier);
+    // the anatomy's cells and the ones left out (terms that do not add up) are derive.views', never chosen here
+    const ab = Number(val("a-batch"));
+    for (const e of Object.keys(D.engine_names)) {
+      draw("c-map-" + e, "map_" + val("metric"), [...head, ...(D.map_gaps || [])].filter(r => r.engine === e));
+      draw("c-anatomy-" + e, "anatomy", D.anatomy.filter(r => r.engine === e && r.batch === ab));
+    }
+    const out = D.anatomy_left_out.filter(r => r.batch === ab).map(r => `${D.engine_names[r.engine]} ${short(r.model)}`);
+    document.getElementById("c-anatomy-note").textContent = out.length
+      ? `Left out: ${out.join(", ")}, whose traces and timing do not add up for this cell.` : "";
+    draw("c-engines", "engines", D.engine_gaps.filter(g => g.level === val("e-level") && g.batch === Number(val("e-batch"))));
+    draw("c-mitigations", "mitigations", D.mitigations);
+    draw("c-stack", "stack", D.stack);
+    const ce = val("c-engine"), cb = Number(val("c-batch")), card = val("c-card"), f = D.fits[ce];
+    const note = document.getElementById("c-calc-note");
+    document.getElementById("c-controls").hidden = document.getElementById("c-calc").hidden = !f;
+    if (!f) {
+      note.textContent = "No engine waited on the host in enough cells, at two batch widths or more, to fit its host " +
+        "cost, so there is nothing to predict from yet.";
+      return;
+    }
+    draw("c-calc", "calculator", predict(ce, card, cb), spec => {
+      for (const layer of spec.layer.slice(1)) for (const ch of ["color", "fill", "stroke"]) {
+        const enc = layer.encoding[ch];
+        if (enc && enc.scale) { enc.scale.range[1] = D.engine_colours[theme()][ce]; enc.scale.domain[1] = "Predicted, " + card; }
+      }
+    });
+    note.textContent = `${D.engine_names[ce]}: host ${f.h0_ms.toFixed(2)} ms per step + ` +
+      (f.h1_fixed_at_zero ? "no cost per sequence its cells can resolve" : `${(f.h1_ms * 1000).toFixed(1)} µs per sequence`) +
+      `, ${f.form === "serial" ? "added to" : "overlapping"} the GPU's time` +
+      (f.lomo_median_error == null ? "; no model could be left out of the fit to test it." :
+      `; median error ${(100 * f.lomo_median_error).toFixed(1)}% on models left out of the fit`) +
+      ". The band is the fit's own uncertainty; a hollow point lies outside the batches it was fitted on.";
+  }
+
+  const button = document.getElementById("theme");
+  const label = () => { button.textContent = theme() === "dark" ? "Light" : "Dark"; };
+  button.addEventListener("click", () => {
+    root.dataset.theme = theme() === "dark" ? "light" : "dark";
+    try { localStorage.setItem("da-theme", root.dataset.theme); } catch (e) {}
+    label(); render();
+  });
+  dark.addEventListener("change", () => { label(); render(); });
+  window.addEventListener("DOMContentLoaded", () => { label(); setup(); render(); explorerSetup(); });
+})();
+</script>
+</body>
+</html>

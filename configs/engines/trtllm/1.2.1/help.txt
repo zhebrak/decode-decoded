@@ -1,0 +1,344 @@
+# no GPU: source listing in place of --help (trtllm-serve options, then LLM-API fields)
+273:@click.option("--tokenizer",
+286:@click.option("--host",
+291:@click.option("--port",
+318:@click.option("--max_beam_width",
+323:@click.option("--max_batch_size",
+343:@click.option("--tensor_parallel_size",
+349:@click.option("--pipeline_parallel_size",
+355:@click.option("--context_parallel_size",
+361:@click.option("--moe_expert_parallel_size",
+367:@click.option("--moe_cluster_parallel_size",
+380:@click.option("--free_gpu_memory_fraction",
+387:@click.option("--num_postprocess_workers",
+393:@click.option("--trust_remote_code",
+398:@click.option("--revision",
+428:@click.option("--metadata_server_config_file",
+447:@click.option("--otlp_traces_endpoint",
+453:@click.option("--disagg_cluster_uri",
+458:@click.option("--enable_chunked_prefill",
+463:@click.option("--media_io_kwargs",
+468:@click.option("--chat_template",
+575:@click.option("--host",
+579:@click.option("--port", type=int, default=8000, help="Port of the server.")
+584:@click.option("--max_batch_size",
+595:@click.option("--gpus_per_node",
+600:@click.option("--trust_remote_code",
+611:@click.option("--metadata_server_config_file",
+98:class StrictBaseModel(BaseModel):
+107:class CudaGraphConfig(StrictBaseModel):
+112:    batch_sizes: Optional[List[int]] = Field(
+116:    max_batch_size: int = Field(
+119:    enable_padding: bool = Field(
+167:class GuidedDecodingConfig(StrictBaseModel):
+173:    backend: GuidedDecodingBackend = Field(
+176:    encoded_vocab: Optional[List[str]] = Field(
+179:    tokenizer_str: Optional[str] = Field(
+182:    stop_token_ids: Optional[List[int]] = Field(
+187:class BaseSparseAttentionConfig(StrictBaseModel):
+191:    seq_len_threshold: Optional[int] = Field(
+246:class RocketSparseAttentionConfig(BaseSparseAttentionConfig):
+250:    algorithm: ClassVar[str] = "rocket"
+251:    window_size: Optional[int] = Field(
+253:    kernel_size: Optional[int] = Field(
+255:    topr: Optional[Union[int, float]] = Field(default=128, description="Top-r")
+256:    topk: Optional[int] = Field(default=64, description="Top-k")
+257:    prompt_budget: Optional[int] = Field(default=2048,
+259:    page_size: Optional[int] = Field(default=4, description="Page size")
+260:    kt_cache_dtype: Optional[str] = Field(
+277:class DeepSeekSparseAttentionConfig(BaseSparseAttentionConfig):
+281:    algorithm: ClassVar[str] = "dsa"
+282:    index_n_heads: Optional[int] = Field(
+284:    index_head_dim: Optional[int] = Field(
+286:    index_topk: Optional[int] = Field(default=None,
+288:    indexer_max_chunk_size: Optional[int] = Field(
+290:    skip_indexer_for_short_seqs: bool = Field(
+311:class SkipSoftmaxAttentionConfig(BaseSparseAttentionConfig):
+315:    algorithm: ClassVar[str] = "skip_softmax"
+316:    threshold_scale_factor: Optional[Union[float, Dict[str, float]]] = Field(
+340:class MoeLoadBalancerConfig(StrictBaseModel):
+349:    num_slots: Optional[int] = None
+350:    initial_global_assignments: Optional[Dict[int, List[int]]] = Field(
+354:    layer_updates_per_iter: int = 0
+355:    _ep_rank: Optional[int] = PrivateAttr(default=None)
+356:    _ep_size: Optional[int] = PrivateAttr(default=None)
+443:class MoeConfig(StrictBaseModel):
+447:    backend: Literal["CUTLASS", "CUTEDSL", "WIDEEP", "TRTLLM", "DEEPGEMM",
+452:    max_num_tokens: Optional[int] = Field(
+458:    load_balancer: Optional[Union[object, str]] = Field(
+463:    disable_finalize_fusion: bool = Field(
+469:    use_low_precision_moe_combine: bool = Field(
+480:class Nvfp4GemmConfig(StrictBaseModel):
+484:    allowed_backends: List[str] = Field(
+508:class AttentionDpConfig(StrictBaseModel):
+512:    enable_balance: bool = Field(default=False,
+514:    timeout_iters: int = Field(
+516:    batching_wait_iters: int = Field(
+525:class _ParallelConfig(StrictBaseModel):
+527:    tp_size: int = 1
+528:    pp_size: int = 1
+529:    cp_size: int = 1
+530:    gpus_per_node: int = 8
+532:    moe_cluster_size: int = -1
+533:    moe_tp_size: int = -1
+534:    moe_ep_size: int = -1
+535:    cp_config: dict = Field(default_factory=dict)
+536:    pp_partition: Optional[List[int]] = Field(default=None)
+537:    enable_attention_dp: bool = False
+538:    enable_lm_head_tp_in_adp: bool = False
+540:    _devices: Optional[List[int]] = PrivateAttr(default=None)
+593:class CalibConfig(StrictBaseModel):
+597:    device: Literal['cuda',
+600:    calib_dataset: str = Field(
+603:    calib_batches: int = Field(
+606:    calib_batch_size: int = Field(
+608:    calib_max_seq_length: int = Field(
+611:    random_seed: int = Field(
+613:    tokenizer_max_seq_length: int = Field(
+639:class _ModelFormatKind(Enum):
+645:class DecodingBaseConfig(StrictBaseModel):
+647:    max_draft_len: Optional[int] = None
+653:    max_total_draft_tokens: Optional[int] = None
+658:    speculative_model: Optional[Union[str, Path]] = Field(
+666:    max_concurrency: Optional[int] = None
+676:    draft_len_schedule: Optional[dict[int, int]] = None
+678:    load_format: Optional[str] = None
+682:    acceptance_window: Optional[int] = None
+687:    acceptance_length_threshold: Optional[float] = None
+691:    allow_advanced_sampling: bool = False
+715:    _allow_chain_drafter: bool = PrivateAttr(True)
+717:    _allow_greedy_draft_tokens: bool = PrivateAttr(True)
+817:class KvCacheConnectorConfig(StrictBaseModel):
+821:    connector_module: str = Field(
+826:    connector_scheduler_class: str = Field(
+828:    connector_worker_class: str = Field(
+832:class MedusaDecodingConfig(DecodingBaseConfig):
+833:    medusa_choices: Optional[List[List[int]]] = None
+834:    num_medusa_heads: Optional[int] = None
+844:    decoding_type: ClassVar[str] = "Medusa"
+850:class EagleDecodingConfig(DecodingBaseConfig):
+851:    eagle_choices: Optional[List[List[int]]] = None
+852:    greedy_sampling: Optional[bool] = True
+853:    posterior_threshold: Optional[float] = None
+855:    use_dynamic_tree: Optional[bool] = False
+859:    num_eagle_layers: Optional[int] = None
+861:    max_non_leaves_per_layer: Optional[int] = None
+862:    eagle3_one_model: Optional[bool] = True
+863:    eagle3_layers_to_capture: Optional[Set[int]] = None
+866:    eagle3_model_arch: str = "llama3"
+942:    decoding_type: ClassVar[str] = "Eagle"
+993:class SaveHiddenStatesDecodingConfig(DecodingBaseConfig):
+994:    output_directory: str
+995:    write_interval: int = 20
+996:    file_prefix: str = "data"
+997:    eagle3_layers_to_capture: Optional[Set[int]] = None
+999:    max_total_draft_tokens: Optional[int] = Field(default=1, init=False)
+1000:    eagle_choices: Optional[List[List[int]]] = Field(default=None, init=False)
+1014:    decoding_type: ClassVar[str] = "SaveState"
+1039:class UserProvidedDecodingConfig(DecodingBaseConfig):
+1041:    drafter: object  # Type is Drafter
+1042:    resource_manager: object = None  # Type is Optional[ResourceManager]
+1052:    decoding_type: ClassVar[str] = "User_Provided"
+1055:class NGramDecodingConfig(DecodingBaseConfig):
+1075:    max_matching_ngram_size: int = 0
+1076:    is_keep_all: bool = True
+1077:    is_use_oldest: bool = True
+1078:    is_public_pool: bool = True
+1088:    decoding_type: ClassVar[str] = "NGram"
+1094:class DraftTargetDecodingConfig(DecodingBaseConfig):
+1104:    decoding_type: ClassVar[str] = "Draft_Target"
+1110:class MTPDecodingConfig(DecodingBaseConfig):
+1111:    num_nextn_predict_layers: int = 1
+1112:    use_relaxed_acceptance_for_thinking: bool = False
+1113:    relaxed_topk: int = 1
+1114:    relaxed_delta: float = 0.
+1115:    use_mtp_vanilla: bool = False
+1116:    mtp_eagle_one_model: bool = True
+1120:    num_nextn_predict_layers_from_model_config: int = 1
+1125:    begin_thinking_phase_token: int = 128798
+1126:    end_thinking_phase_token: int = 128799
+1148:    decoding_type: ClassVar[str] = "MTP"
+1170:class AutoDecodingConfig(DecodingBaseConfig):
+1188:    decoding_type: ClassVar[str] = "AUTO"
+1194:class RayPlacementConfig(StrictBaseModel):
+1199:    defer_workers_init: bool = Field(
+1203:    placement_groups: Optional[List[Any]] = Field(
+1209:    placement_bundle_indices: Optional[List[List[int]]] = Field(
+1215:    per_worker_gpu_share: Optional[float] = Field(
+1253:class PybindMirror(ABC):
+1400:class PybindMirrorMeta(type(PybindMirror)):
+1404:class PybindMirrorEnumMeta(EnumMeta, PybindMirrorMeta):
+1411:class BatchingType(StrEnum, metaclass=PybindMirrorEnumMeta):
+1420:class CapacitySchedulerPolicy(StrEnum, metaclass=PybindMirrorEnumMeta):
+1430:class ContextChunkingPolicy(StrEnum, metaclass=PybindMirrorEnumMeta):
+1440:class DynamicBatchConfig(StrictBaseModel, PybindMirror):
+1445:    enable_batch_size_tuning: bool = Field(
+1448:    enable_max_num_tokens_tuning: bool = Field(
+1452:    dynamic_batch_moving_average_window: int = Field(
+1466:class SchedulerConfig(StrictBaseModel, PybindMirror):
+1467:    capacity_scheduler_policy: CapacitySchedulerPolicy = Field(
+1471:    context_chunking_policy: Optional[ContextChunkingPolicy] = Field(
+1474:    dynamic_batch_config: Optional[DynamicBatchConfig] = Field(
+1488:class PeftCacheConfig(StrictBaseModel, PybindMirror):
+1492:    num_host_module_layer: int = Field(
+1497:    num_device_module_layer: int = Field(
+1503:    optimal_adapter_size: int = Field(
+1507:    max_adapter_size: int = Field(
+1510:    num_put_workers: int = Field(
+1514:    num_ensure_workers: int = Field(
+1518:    num_copy_streams: int = Field(
+1522:    max_pages_per_block_host: int = Field(
+1525:    max_pages_per_block_device: int = Field(
+1528:    device_cache_percent: float = Field(
+1533:    host_cache_size: int = Field(
+1535:    lora_prefetch_dir: Optional[str] = Field(
+1558:class LookaheadDecodingConfig(DecodingBaseConfig, PybindMirror):
+1563:    max_window_size: int = Field(
+1567:    max_ngram_size: int = Field(
+1570:    max_verification_set_size: int = Field(
+1605:    decoding_type: ClassVar[str] = "Lookahead"
+1628:class KvCacheConfig(StrictBaseModel, PybindMirror):
+1632:    enable_block_reuse: bool = Field(
+1636:    max_tokens: Optional[int] = Field(
+1641:    max_attention_window: Optional[List[int]] = Field(
+1646:    sink_token_length: Optional[int] = Field(
+1650:    free_gpu_memory_fraction: Optional[float] = Field(
+1655:    host_cache_size: Optional[int] = Field(
+1660:    onboard_blocks: bool = Field(
+1662:    cross_kv_cache_fraction: Optional[float] = Field(
+1667:    secondary_offload_min_priority: Optional[int] = Field(
+1672:    event_buffer_max_size: int = Field(
+1677:    attention_dp_events_gather_period_ms: int = Field(
+1682:    enable_partial_reuse: bool = Field(
+1686:    copy_on_partial_reuse: bool = Field(
+1691:    use_uvm: bool = Field(default=False,
+1693:    max_gpu_total_bytes: int = Field(
+1700:    dtype: str = Field(default="auto",
+1704:    mamba_ssm_cache_dtype: Literal[
+1711:    tokens_per_block: int = Field(default=32,
+1776:class ExtendedRuntimePerfKnobConfig(StrictBaseModel, PybindMirror):
+1781:    multi_block_mode: bool = Field(
+1784:    enable_context_fmha_fp32_acc: bool = Field(
+1788:    cuda_graph_mode: bool = Field(default=False,
+1791:    cuda_graph_cache_size: int = Field(
+1807:class CacheTransceiverConfig(StrictBaseModel, PybindMirror):
+1812:    backend: Optional[Literal[
+1818:    max_tokens_in_buffer: Optional[int] = Field(
+1822:    kv_transfer_timeout_ms: Optional[int] = Field(
+1829:    kv_transfer_sender_future_timeout_ms: Optional[int] = Field(
+1846:class _ModelWrapper:
+1847:    model: Union[str, Path]
+1885:class BaseLlmArgs(StrictBaseModel):
+1895:    model: Union[str, Path] = Field(
+1900:    tokenizer: Optional[Union[
+1906:    tokenizer_mode: Literal['auto', 'slow'] = Field(
+1911:    custom_tokenizer: Optional[str] = Field(
+1919:    skip_tokenizer_init: bool = Field(
+1923:    trust_remote_code: bool = Field(
+1926:    tensor_parallel_size: int = Field(default=1,
+1929:    dtype: str = Field(default="auto",
+1932:    revision: Optional[str] = Field(
+1935:    tokenizer_revision: Optional[str] = Field(
+1940:    pipeline_parallel_size: int = Field(
+1943:    context_parallel_size: int = Field(default=1,
+1946:    gpus_per_node: Optional[int] = Field(
+1952:    moe_cluster_parallel_size: Optional[int] = Field(
+1957:    moe_tensor_parallel_size: Optional[int] = Field(
+1961:    moe_expert_parallel_size: Optional[int] = Field(
+1965:    enable_attention_dp: bool = Field(
+1970:    enable_lm_head_tp_in_adp: bool = Field(
+1975:    pp_partition: Optional[List[int]] = Field(
+1981:    cp_config: Optional[dict] = Field(default_factory=dict,
+1985:    load_format: Literal['auto', 'dummy'] = Field(
+1990:    fail_fast_on_attention_window_too_large: bool = Field(
+1997:    enable_lora: bool = Field(default=False, description="Enable LoRA.")
+1999:    lora_config: Optional[LoraConfig] = Field(
+2003:    kv_cache_config: KvCacheConfig = Field(default_factory=KvCacheConfig,
+2006:    enable_chunked_prefill: bool = Field(default=False,
+2009:    guided_decoding_backend: Optional[Literal["xgrammar", "llguidance"]] = Field(
+2015:    batched_logits_processor: Optional[object] = Field(
+2022:    iter_stats_max_iterations: Optional[int] = Field(
+2027:    request_stats_max_iterations: Optional[int] = Field(
+2033:    peft_cache_config: Optional[PeftCacheConfig] = Field(
+2036:    scheduler_config: SchedulerConfig = Field(default_factory=SchedulerConfig,
+2040:    cache_transceiver_config: Optional[CacheTransceiverConfig] = Field(
+2046:    sparse_attention_config: Optional[SparseAttentionConfig] = Field(
+2052:    speculative_config: SpeculativeConfig = Field(
+2055:    max_batch_size: Optional[int] = Field(default=None,
+2059:    max_input_len: Optional[int] = Field(
+2062:    max_seq_len: Optional[int] = Field(
+2065:    max_beam_width: Optional[int] = Field(default=None,
+2068:    max_num_tokens: Optional[int] = Field(
+2071:    gather_generation_logits: bool = Field(
+2077:    num_postprocess_workers: int = Field(
+2083:    postprocess_tokenizer_dir: Optional[str] = Field(
+2088:    reasoning_parser: Optional[str] = Field(
+2094:    decoding_config: Optional[object] = Field(
+2104:    mpi_session: Optional[object] = Field(
+2111:    otlp_traces_endpoint: Optional[str] = Field(
+2117:    backend: Optional[str] = Field(
+2125:    return_perf_metrics: bool = Field(default=False,
+2129:    orchestrator_type: Optional[Literal["rpc", "ray"]] = Field(
+2136:    env_overrides: Optional[Dict[str, str]] = Field(
+2150:    _parallel_config: Optional[_ParallelConfig] = PrivateAttr(default=None)
+2151:    _model_format: Optional[_ModelFormatKind] = PrivateAttr(default=None)
+2358:class TrtLlmArgs(BaseLlmArgs):
+2359:    enable_tqdm: bool = Field(default=False,
+2362:    workspace: Optional[str] = Field(default=None,
+2366:    enable_build_cache: object = Field(
+2373:    extended_runtime_perf_knob_config: Optional[
+2377:    calib_config: Optional[CalibConfig] = Field(
+2381:    quant_config: Optional[QuantConfig] = Field(
+2384:    embedding_parallel_mode: str = Field(
+2388:    fast_build: bool = Field(default=False, description="Enable fast build.")
+2391:    build_config: Optional[BuildConfig] = Field(default=None,
+2395:    enable_prompt_adapter: bool = Field(default=False,
+2398:    max_prompt_adapter_token: int = Field(
+2401:    batching_type: Optional[BatchingType] = Field(default=None,
+2404:    normalize_log_probs: bool = Field(
+2409:    _convert_checkpoint_options: Dict[str,
+2699:class LoadFormat(Enum):
+2707:class SamplerType(StrEnum):
+2714:class TorchCompileConfig(StrictBaseModel):
+2718:    enable_fullgraph: bool = Field(
+2722:    enable_inductor: bool = Field(
+2725:    enable_piecewise_cuda_graph: bool = Field(
+2729:    capture_num_tokens: Optional[List[int]] = Field(
+2744:    enable_userbuffers: bool = Field(
+2749:    max_num_streams: int = Field(
+2768:class TorchLlmArgs(BaseLlmArgs):
+2770:    garbage_collection_gen0_threshold: int = Field(
+2777:    cuda_graph_config: Optional[CudaGraphConfig] = Field(
+2787:    attention_dp_config: Optional[AttentionDpConfig] = Field(
+2792:    disable_overlap_scheduler: bool = Field(
+2797:    moe_config: MoeConfig = Field(default_factory=MoeConfig,
+2801:    nvfp4_gemm_config: Nvfp4GemmConfig = Field(
+2806:    attn_backend: str = Field(default='TRTLLM',
+2810:    sampler_type: Union[str, SamplerType] = Field(
+2816:    sampler_force_async_worker: bool = Field(
+2825:    enable_iter_perf_stats: bool = Field(
+2830:    enable_iter_req_stats: bool = Field(
+2836:    print_iter_log: bool = Field(default=False,
+2840:    perf_metrics_max_requests: int = Field(
+2846:    batch_wait_timeout_ms: float = Field(
+2852:    batch_wait_timeout_iters: int = Field(
+2858:    batch_wait_max_tokens_ratio: float = Field(
+2864:    torch_compile_config: Optional[TorchCompileConfig] = Field(
+2867:    enable_autotuner: bool = Field(
+2873:    enable_layerwise_nvtx_marker: bool = Field(
+2878:    load_format: Union[str, LoadFormat] = Field(
+2884:    enable_min_latency: bool = Field(
+2892:    stream_interval: int = Field(
+2899:    force_dynamic_quantization: bool = Field(
+2905:    allreduce_strategy: Optional[Literal[
+2911:    checkpoint_loader: Optional[object] = Field(
+2927:    checkpoint_format: Optional[str] = Field(
+2938:    kv_connector_config: Optional[KvCacheConnectorConfig] = Field(
+2944:    mm_encoder_only: bool = Field(
+2951:    ray_worker_extension_cls: Optional[str] = Field(
+2957:    ray_placement_config: Optional[RayPlacementConfig] = Field(
+2964:    enable_sleep: bool = Field(
+2972:    _quant_config: Optional[QuantConfig] = PrivateAttr(default=None)
+2974:    disable_flashinfer_sampling: bool = Field(
+2981:    max_stats_len: int = Field(
+3019:    _extra_resource_managers: Dict[str,

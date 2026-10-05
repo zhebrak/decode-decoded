@@ -1,0 +1,171 @@
+# Grid v1, the study. Expanded by anatomy.grid into units (one container run each, its batch sweep inside).
+# Three engines, each with an offline API, so level "headline" is L1 throughout. llama.cpp v0.5.0 was validated with
+# the harness and left out of the study: its server's many-slot cells are host-bound, and the
+# study's host has eight cores; configs/grid/validation/four-engines.yaml keeps the
+# four-engine design for the harness's llama.cpp paths. Batches above the KV bound for a model are dropped at expansion: the KV that fits beside the weights in
+# memory_fraction of the card, less kv_reserve_gib that every engine also holds (activations, CUDA graph pools,
+# allocator slack), so the top-end cells are ones every engine can hold; "max" becomes that bound, and the driver
+# still records whatever the engine's own KV capacity admits.
+versions: 2026-09
+gpu: NVIDIA H100 80GB HBM3
+memory_fraction: 0.9
+kv_reserve_gib: 6              # measured on an H100 SXM at 0.9 in validation: vLLM, the tightest,
+                               # held 258,224 KV tokens for 14B (218 sequences of 1,184) and 23,040 for 32B (19);
+                               # TensorRT-LLM 286,528 and 54,016; SGLang ran 222 and 23 without a stall. 6 GiB below
+                               # the naive bound gives 14B 211 and 32B 16, which every engine holds with room to spare
+                               # on another host (5 GiB would give 216 and 19: no margin at 32B)
+max_batch: 256                 # every engine's max_num_seqs / max running requests (configs/engines; SGLang's is 257,
+                               # one over, so that 256 decode together)
+clock_mhz: 1830                # SM clock locked per session (nvidia-smi -lgc) when root allows; one sentinel unlocked.
+                               # The highest clock an H100 SXM holds under a lock: asked 1980 (its boost ceiling) or
+                               # 1900, the study's VM held 1830; asked 1830, it held 1830 (an H100 PCIe VM held
+                               # 1620 of 1755 asked). The ruler's clock log reads what the card held, every cell is read
+                               # against that, and a study session whose card holds another clock than asked fails its
+                               # gate (anatomy.gate clock): the page names the clock the cells ran at
+context: {prompt_len: 896, gen_len: 288}
+qwen3: &qwen3 [Qwen/Qwen3-0.6B, Qwen/Qwen3-1.7B, Qwen/Qwen3-4B, Qwen/Qwen3-8B, Qwen/Qwen3-14B, Qwen/Qwen3-32B]
+engines: &engines [vllm, sglang, trtllm]
+
+sentinels:   # timing only, at the start and end of every session. Gate G2 is drift within a session (start against end,
+             # beyond sentinel_drift: configs/tolerances.yaml); drift between sessions is a host difference, which
+             # feeds the noise of the rare cross-session comparison (anatomy.report.derive.Noise), and the readings
+             # check that the first session's noise holds on each later session's host (Noise.check)
+  - {engine: vllm, arm: defaults, level: L1, model: Qwen/Qwen3-0.6B, batches: [1]}
+  - {engine: vllm, arm: defaults, level: L1, model: Qwen/Qwen3-8B, batches: [64], unlocked: true}
+  - {engine: vllm, arm: defaults, level: L2, model: Qwen/Qwen3-0.6B, batches: [8]}      # a server
+  - {engine: sglang, arm: defaults, level: L1, model: Qwen/Qwen3-0.6B, batches: [1, 64]}   # and a GPU-bound batch
+  - {engine: trtllm, arm: defaults, level: L1, model: Qwen/Qwen3-0.6B, batches: [1]}
+
+noise:       # S1 only, at its start and end: run-to-run spread between processes (anatomy.tidy writes noise.csv), the
+             # uncertainty every comparison is judged against (anatomy.report.derive.Noise, per engine, level, arm and
+             # batch) and the tolerances' basis (configs/tolerances.yaml)
+  session: S1
+  processes: 3
+  with_sentinels: true
+  cells:     # each a block of timing units
+    small:        # the server's noise too: the patterns compare servers, and the server with the engine
+      {engines: *engines, arms: [defaults], levels: [headline, L2], models: [Qwen/Qwen3-0.6B], batches: [1, 8, 64]}
+    runner:       # the forward loop alone, a different estimator (its own step report): the runner comparisons' noise
+      {engines: [sglang], arms: [defaults], levels: [L0], models: [Qwen/Qwen3-0.6B], batches: [1, 8, 64]}
+    large:        # a GPU-bound model: noise need not fall with the host's share; 256 for the high-power cells
+      {engines: *engines, arms: [defaults], levels: [headline], models: [Qwen/Qwen3-8B], batches: [1, 64, 256]}
+    occupancy:    # graph traces, so occupancy's own spread between processes is measured, not assumed
+      {engines: *engines, arms: [defaults], levels: [headline], models: [Qwen/Qwen3-0.6B], batches: [1, 64],
+       captures: {graph: all}}
+    # each engine's most host-bound mitigation arm: the noise its arm comparisons carry, its occupancy's too (a graph
+    # trace each): a host-bound arm's spread is not a GPU-bound defaults cell's (derive.occupancy_noise)
+    host_async: {engines: [vllm], arms: [async-off], levels: [headline], models: [Qwen/Qwen3-0.6B],
+                 batches: [1, 8, 64], captures: {timing: all, graph: all}}
+    host_overlap: {engines: [sglang, trtllm], arms: [overlap-off], levels: [headline], models: [Qwen/Qwen3-0.6B],
+                   batches: [1, 8, 64], captures: {timing: all, graph: all}}
+
+blocks:
+  bringup:       # S1: one end-to-end cell pair per engine with every capture, for Gate G1 (estimators, overhead)
+    session: S1
+    engines: *engines
+    arms: [defaults]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-0.6B, 1], [Qwen/Qwen3-8B, 64]]
+    captures: {timing: all, graph: all, node: all, hostload: all}   # hostload: does a slower host leave busy time alone?
+  scale:         # S1: each engine's largest S2 cells (the KV bound at 0.9 of the card, 256 sequences at 0.6B) and
+    session: S1  # the largest trace, so what breaks only at scale breaks here and not ten hours into S2
+    engines: *engines
+    arms: [defaults]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-32B, max], [Qwen/Qwen3-14B, max], [Qwen/Qwen3-0.6B, 256]]
+    captures: {timing: all, node: [256]}
+  anchors:       # S1: every engine's graphs-off arm, so a step anchor that fires twice a step (or never) shows here and
+    session: S1  # not after S2's mitigations
+    engines: *engines
+    arms: [graphs-off]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-0.6B, 1]]
+    captures: {timing: all, graph: all}
+  # S2: everything compared with the headline defaults, in one session on one host. anatomy.grid runs it model by
+  # model and engine by engine, the blocks interleaved, so a cell's defaults, its mitigation arms, its server and its
+  # runner run back to back and every comparison is a same-session pair
+  main:
+    session: S2
+    engines: *engines
+    arms: [defaults]
+    levels: [headline]
+    models: *qwen3
+    batches: [1, 2, 4, 8, 16, 32, 64, 128, 256, max]
+    captures: {timing: all, graph: all, node: all}   # kernel time at every batch: a full anatomy for every cell
+  mitigations:
+    session: S2
+    engines: *engines
+    arms: [non-default]          # every arm of the release except defaults and optional ones
+    levels: [headline]
+    models: [Qwen/Qwen3-0.6B, Qwen/Qwen3-1.7B, Qwen/Qwen3-8B]
+    batches: [1, 8, 64, 256]
+    captures: {timing: all, graph: all}
+  # busy-time invariance where the busy share rests on it (anatomy.tidy.busy_invariance): the cells whose busy share
+  # is read as busy time over the untraced step, because tracing stretched a host-bound step (graphs off at small
+  # batches, the serial arms at large ones), in this session beside the cells they test, as a hostload
+  # capture must be. Each cell says whether its contention stretched the step enough to test anything
+  hostload_arms:
+    session: S2
+    engines: *engines
+    arms: [graphs-off]
+    levels: [headline]
+    models: [Qwen/Qwen3-0.6B]
+    batches: [1, 8]
+    captures: {hostload: all}
+  hostload_serial:
+    session: S2
+    engines: [vllm, sglang, trtllm]
+    arms: [async-off, overlap-off]       # each engine's own: vLLM's async scheduling, the others' overlap scheduler
+    levels: [headline]
+    models: [Qwen/Qwen3-0.6B]
+    batches: [64, 256]
+    captures: {hostload: all}
+  hostload_defaults:
+    session: S2
+    engines: *engines
+    arms: [defaults]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-0.6B, 256]]
+    captures: {hostload: all}
+  served:        # the server against the engine API, and the servers against each other at the same streams. 32 was
+    session: S2  # added before S2 ran (2026-10-03): on the study's 8-core host TensorRT-LLM's server let sequences fall
+    engines: [vllm, sglang, trtllm]   # behind at 64 streams and kept up at 8, so 32 shows where it stops keeping up and
+    arms: [defaults]                  # keeps it a high-concurrency server cell; judged at the noise block's batch line
+    levels: [L2]
+    models: [Qwen/Qwen3-0.6B, Qwen/Qwen3-4B, Qwen/Qwen3-14B]
+    batches: [1, 16, 32, 64]
+    captures: {served: all, graph: all}
+  runner:        # L0, the forward loop alone, against the engine API: what SGLang's scheduler costs
+    session: S2
+    engines: [sglang]
+    arms: [defaults]
+    levels: [L0]
+    models: [Qwen/Qwen3-0.6B, Qwen/Qwen3-1.7B, Qwen/Qwen3-4B, Qwen/Qwen3-14B]
+    batches: [1, 16, 64]
+    captures: {runner: all}
+  # S3: cells read on their own, never paired with S2's
+  long_context:
+    session: S3
+    context: {prompt_len: 8064, gen_len: 288}
+    engines: *engines
+    arms: [defaults]
+    levels: [headline]
+    models: [Qwen/Qwen3-0.6B, Qwen/Qwen3-8B, Qwen/Qwen3-14B]
+    batches: [1, 8]
+    captures: {timing: all, graph: all}
+  second_family:
+    session: S3
+    engines: [vllm, sglang]
+    arms: [defaults]
+    levels: [headline]
+    models: [unsloth/Llama-3.2-1B-Instruct, unsloth/Llama-3.2-3B-Instruct, unsloth/Llama-3.1-8B-Instruct]
+    batches: [1, 64]
+    captures: {timing: all, graph: all}
+  dram:
+    session: S3
+    engines: [vllm, sglang]
+    arms: [defaults]
+    levels: [headline]
+    models: [Qwen/Qwen3-0.6B, Qwen/Qwen3-8B, Qwen/Qwen3-32B]
+    batches: [1, 64]
+    captures: {metrics: all}

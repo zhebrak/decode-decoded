@@ -1,0 +1,52 @@
+# suggested by anatomy.tidy from S1-fake's noise block, by the rule in configs/tolerances.yaml's header: copy set_from, overlap_model and the four tolerance values above `bands` into it
+set_from: S1-fake
+overlap_model: corrected
+step_noise: 0.006
+agree: 0.02
+range_ok: 0.02
+sentinel_drift: 0.02
+bands:
+  step_noise:
+  - 0.002
+  - 0.01
+  agree:
+  - 0.02
+  - 0.05
+  range_ok:
+  - 0.02
+  - 0.05
+  sentinel_drift:
+  - 0.02
+  - 0.05
+overlap_model_evidence:
+  windows: 2
+  informative: 2
+  timer_step_ns: 8
+  truth_spread_ns: 10.0
+  truth_passes: 3
+  corrected_wins: 2
+  min_gap_ns: 27.0
+  resolution_ns: 10.0
+  verdict: 'corrected: every window by more than 10 ns'
+g1_failures: []
+per_engine:
+- engine: llamacpp
+  level: L2
+  noise_cells: 2
+  readings: 11
+  step_noise: 0.005
+  agree: 0.0
+  range_ok: 0.0
+  sentinel_drift: 0.015
+- engine: vllm
+  level: L1
+  noise_cells: 2
+  readings: 11
+  step_noise: 0.006
+  agree: 0.0
+  range_ok: 0.0
+  sentinel_drift: 0.018
+from:
+  engine_levels: 2
+  noise_cells: 4
+  readings: 22

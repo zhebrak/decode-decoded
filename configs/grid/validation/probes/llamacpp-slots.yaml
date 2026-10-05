@@ -1,0 +1,20 @@
+# A validation probe for S1 on the study's host. validation: true, so
+# none of it is study data, and its block, probe-slots, keys its unit apart from S1's own llama.cpp unit of the same
+# model (servebench.results.REPEATED). Probe: one server of 64 slots for batches 1, 8 and 64 in turn, as every
+# llama.cpp unit ran before server_per_batch sized a server per batch. On the pod one 256-slot server ran batch 8 at
+# 6.65 ms against 3.70 fresh, its waves in slots that were not one run; anatomy.tidy.llama_slots names the waves that
+# split, and the noise block's servers (a server per batch, -np B) are the fresh condition beside it.
+#   GRID=configs/grid/validation/probes/llamacpp-slots.yaml scripts/session.sh S1 --block probe-slots
+extends: configs/grid/v1.yaml
+validation: true
+overrides:
+  llamacpp:
+    server_per_batch: false
+blocks:
+  probe-slots:
+    session: S1
+    engines: [llamacpp]
+    arms: [defaults]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-0.6B, 1], [Qwen/Qwen3-0.6B, 8], [Qwen/Qwen3-0.6B, 64]]
+    captures: {timing: all}

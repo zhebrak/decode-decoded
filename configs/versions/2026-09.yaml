@@ -1,0 +1,5 @@
+# The engine releases v1 measures (seen 2026-09-30). A refresh adds a new file and names it in the grid.
+vllm: 0.30.0
+sglang: 0.5.20
+trtllm: 1.2.1
+llamacpp: v0.5.0

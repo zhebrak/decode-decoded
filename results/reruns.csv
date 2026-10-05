@@ -1,0 +1,4 @@
+session,unit,batches,ranges
+S2-20261003,trtllm-1.2.1/defaults/L2/Qwen3-0.6B/served,32,"B=32: repeats 0.7%, differential 47.2%"
+S2-20261003,trtllm-1.2.1/graphs-off/L1/Qwen3-0.6B/timing,8,"B=8: repeats 5.2%, differential 7.3%"
+S2-20261003,trtllm-1.2.1/graphs-off/L1/Qwen3-1.7B/timing,8 256,"B=8: repeats 4.4%, differential 6.5%; B=256: repeats 5.1%, differential 9.0%"

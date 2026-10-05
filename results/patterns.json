@@ -1,0 +1,2836 @@
+{
+ "about": {
+  "schema": "decode-anatomy/export/1",
+  "dataset_status": "study",
+  "not_study": [],
+  "source_commit": "50675ae",
+  "generated": "2026-10-05 19:47 UTC",
+  "cards": [
+   "NVIDIA H100 80GB HBM3"
+  ],
+  "engines": {
+   "sglang": "0.5.20",
+   "trtllm": "1.2.1",
+   "vllm": "0.30.0"
+  },
+  "models": [
+   "Qwen3-0.6B",
+   "Llama-3.2-1B-Instruct",
+   "Qwen3-1.7B",
+   "Llama-3.2-3B-Instruct",
+   "Qwen3-4B",
+   "Llama-3.1-8B-Instruct",
+   "Qwen3-8B",
+   "Qwen3-14B",
+   "Qwen3-32B"
+  ],
+  "batches": [
+   1,
+   2,
+   4,
+   8,
+   16,
+   32,
+   64,
+   128,
+   211,
+   256
+  ],
+  "sessions": [
+   "S2-20261003",
+   "S3-20261003"
+  ],
+  "measured": {
+   "first": "2026-10-03",
+   "last": "2026-10-04"
+  }
+ },
+ "principles": [
+  {
+   "section": "crossover",
+   "claim": "The GPU barely waits on the host, even at batch 1.",
+   "evidence": "No cell is under 90% busy beyond its noise; the least busy is 97% (TensorRT-LLM, 0.6B, batch 1).",
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b211",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b211",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b211",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b8"
+   ]
+  },
+  {
+   "section": "anatomy",
+   "claim": "Most of a 0.6B step is spent above the bandwidth floor, the largest part of it kernel excess; most of a 32B step is the floor.",
+   "evidence": "At batch 1 the floor is 23%\u201328% of a 0.6B step and 86%\u201388% of a 32B step. Above the floor, kernel excess is the largest part for every engine at 0.6B.",
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b1"
+   ]
+  },
+  {
+   "section": "engines",
+   "claim": "Engines differ most on small models.",
+   "evidence": "At the engine API (batch 1\u201316), the slowest step is up to 33% longer than the fastest at 0.6B, and 4.7% longer at 32B. vLLM is the fastest beyond noise in 15 of 50 cells compared; in 30 the fastest is within noise of another engine. Among the servers, TensorRT-LLM is up to 29% longer than the fastest.",
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b211",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b2",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b211",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b211",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b2",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b8"
+   ]
+  },
+  {
+   "section": "mitigations",
+   "claim": "Of the mitigations, CUDA graphs matter most.",
+   "evidence": "CUDA graphs off, the step is up to 8.5x as long (SGLang, 0.6B, batch 1); then async scheduling off, up to 1.6x as long (vLLM); overlap scheduler off, up to 1.5x as long (TensorRT-LLM). Within noise everywhere: model Runner V2 off.",
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b8",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-0.6B/b256",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-0.6B/b64",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-0.6B/b8",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-1.7B/b1",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-1.7B/b256",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-1.7B/b64",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-1.7B/b8",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-8B/b1",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-8B/b256",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-8B/b64",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-8B/b8",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b256",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b64",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b8",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b1",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b256",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b64",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b8",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b1",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b256",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b64",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b8",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-0.6B/b256",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-0.6B/b64",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-0.6B/b8",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-1.7B/b1",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-1.7B/b256",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-1.7B/b64",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-1.7B/b8",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-8B/b1",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-8B/b256",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-8B/b64",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-8B/b8",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b256",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b64",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b8",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b1",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b256",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b64",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b8",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b1",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b256",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b64",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b8",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b256",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b64",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b8",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b1",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b256",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b64",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b8",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b256",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b64",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b8",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-0.6B/b256",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-0.6B/b64",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-0.6B/b8",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-1.7B/b1",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-1.7B/b256",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-1.7B/b64",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-1.7B/b8",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-8B/b256",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-8B/b64",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-8B/b8",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-0.6B/b256",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-0.6B/b64",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-0.6B/b8",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-1.7B/b1",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-1.7B/b256",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-1.7B/b64",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-1.7B/b8",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-8B/b256",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-8B/b64",
+    "vllm-0.30.0/mrv2-off/L1/Qwen3-8B/b8"
+   ]
+  },
+  {
+   "section": "stack",
+   "claim": "The server stack costs nothing beyond noise over the engine API.",
+   "evidence": "Within noise in all 33 cells measured at both (0.6B\u201314B, batch 1\u201364); the most it could hide is 4.9% for vLLM, 1.0% for SGLang, 17% for TensorRT-LLM; the largest difference is 0.7% (\u00b1 5.3%, one SD; TensorRT-LLM, 0.6B, batch 1). HTTP, streaming, detokenising and the server's own scheduling together. Not compared: all 3 server cells rejected, TensorRT-LLM at 32\u201364 streams on 0.6B\u20134B (sequences fell behind the batch: a frontend that could not keep its streams even on this host).",
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b64",
+    "sglang-0.5.20/defaults/L2/Qwen3-0.6B/b1",
+    "sglang-0.5.20/defaults/L2/Qwen3-0.6B/b16",
+    "sglang-0.5.20/defaults/L2/Qwen3-0.6B/b32",
+    "sglang-0.5.20/defaults/L2/Qwen3-0.6B/b64",
+    "sglang-0.5.20/defaults/L2/Qwen3-14B/b1",
+    "sglang-0.5.20/defaults/L2/Qwen3-14B/b16",
+    "sglang-0.5.20/defaults/L2/Qwen3-14B/b32",
+    "sglang-0.5.20/defaults/L2/Qwen3-14B/b64",
+    "sglang-0.5.20/defaults/L2/Qwen3-4B/b1",
+    "sglang-0.5.20/defaults/L2/Qwen3-4B/b16",
+    "sglang-0.5.20/defaults/L2/Qwen3-4B/b32",
+    "sglang-0.5.20/defaults/L2/Qwen3-4B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b32",
+    "trtllm-1.2.1/defaults/L2/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/defaults/L2/Qwen3-0.6B/b16",
+    "trtllm-1.2.1/defaults/L2/Qwen3-14B/b1",
+    "trtllm-1.2.1/defaults/L2/Qwen3-14B/b16",
+    "trtllm-1.2.1/defaults/L2/Qwen3-14B/b32",
+    "trtllm-1.2.1/defaults/L2/Qwen3-14B/b64",
+    "trtllm-1.2.1/defaults/L2/Qwen3-4B/b1",
+    "trtllm-1.2.1/defaults/L2/Qwen3-4B/b16",
+    "trtllm-1.2.1/defaults/L2/Qwen3-4B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b16",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b64",
+    "vllm-0.30.0/defaults/L2/Qwen3-0.6B/b1",
+    "vllm-0.30.0/defaults/L2/Qwen3-0.6B/b16",
+    "vllm-0.30.0/defaults/L2/Qwen3-0.6B/b32",
+    "vllm-0.30.0/defaults/L2/Qwen3-0.6B/b64",
+    "vllm-0.30.0/defaults/L2/Qwen3-14B/b1",
+    "vllm-0.30.0/defaults/L2/Qwen3-14B/b16",
+    "vllm-0.30.0/defaults/L2/Qwen3-14B/b32",
+    "vllm-0.30.0/defaults/L2/Qwen3-14B/b64",
+    "vllm-0.30.0/defaults/L2/Qwen3-4B/b1",
+    "vllm-0.30.0/defaults/L2/Qwen3-4B/b16",
+    "vllm-0.30.0/defaults/L2/Qwen3-4B/b32",
+    "vllm-0.30.0/defaults/L2/Qwen3-4B/b64"
+   ]
+  }
+ ],
+ "patterns": [
+  {
+   "kind": "crossover",
+   "engine": "vllm",
+   "effect": 0.0,
+   "cells": [],
+   "text": "vLLM keeps the GPU 90% busy: 0.6B\u201332B from batch 1."
+  },
+  {
+   "kind": "crossover",
+   "engine": "sglang",
+   "effect": 0.0,
+   "cells": [],
+   "text": "SGLang keeps the GPU 90% busy: 0.6B\u201332B from batch 1."
+  },
+  {
+   "kind": "crossover",
+   "engine": "trtllm",
+   "effect": 0.0,
+   "cells": [],
+   "text": "TensorRT-LLM keeps the GPU 90% busy: 0.6B\u201332B from batch 1."
+  },
+  {
+   "kind": "anatomy",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 0.49838366910253695,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 1, 1.83 ms: the bandwidth floor 23%, kernel excess 46%\u201350%, launching kernels 15%\u201319%, gaps inside graphs 7.6%, copies 0.9%, host stall within noise; beyond the floor, kernel excess is the largest part."
+  },
+  {
+   "kind": "anatomy",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 0.42895677649321134,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "vLLM, 0.6B, batch 1, 1.58 ms: the bandwidth floor 27%, kernel excess 38%\u201343%, launching kernels 18%\u201324%, gaps inside graphs 10%, copies 0.5%, host stall within noise; beyond the floor, kernel excess is the largest part."
+  },
+  {
+   "kind": "anatomy",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 0.39163644841439116,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "SGLang, 0.6B, batch 1, 1.51 ms: the bandwidth floor 28%, kernel excess 33%\u201339%, launching kernels 21%\u201326%, gaps inside graphs 11%, host stall within noise; beyond the floor, kernel excess is the largest part."
+  },
+  {
+   "kind": "anatomy",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-32B",
+   "batch": 1,
+   "effect": 0.10247277195573982,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b1"
+   ],
+   "text": "TensorRT-LLM, 32B, batch 1, 24.47 ms: the bandwidth floor 86%, kernel excess 9.5%\u201310%, launching kernels 2.6%\u20133.4%, gaps inside graphs 1.2%, host stall within noise; beyond the floor, kernel excess is the largest part."
+  },
+  {
+   "kind": "anatomy",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-32B",
+   "batch": 1,
+   "effect": 0.08577424911980423,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b1"
+   ],
+   "text": "vLLM, 32B, batch 1, 24.11 ms: the bandwidth floor 87%, kernel excess 7.8%\u20138.6%, launching kernels 2.9%\u20133.7%, gaps inside graphs 1.4%, host stall within noise; beyond the floor, kernel excess is the largest part."
+  },
+  {
+   "kind": "anatomy",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-32B",
+   "batch": 1,
+   "effect": 0.07445062131950254,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b1"
+   ],
+   "text": "SGLang, 32B, batch 1, 23.75 ms: the bandwidth floor 88%, kernel excess 6.5%\u20137.4%, launching kernels 3.1%\u20134.0%, gaps inside graphs 1.2%, host stall within noise; beyond the floor, kernel excess is the largest part."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 8,
+   "level": "L1",
+   "effect": 0.33356060548444355,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b8"
+   ],
+   "text": "0.6B, batch 8, the engine API (L1): vLLM has the shortest step, 1.91 ms; SGLang within noise of it; TensorRT-LLM's 33% longer (\u00b1 0.8%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 4,
+   "level": "L1",
+   "effect": 0.304563623804049,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b4"
+   ],
+   "text": "0.6B, batch 4, the engine API (L1): vLLM has the shortest step, 1.73 ms; SGLang within noise of it; TensorRT-LLM's 30% longer (\u00b1 1.1%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 16,
+   "level": "L2",
+   "effect": 0.2902535832858171,
+   "cells": [
+    "sglang-0.5.20/defaults/L2/Qwen3-0.6B/b16",
+    "trtllm-1.2.1/defaults/L2/Qwen3-0.6B/b16"
+   ],
+   "text": "0.6B, batch 16, the server (L2): SGLang has the shortest step, 2.26 ms; vLLM within noise of it; TensorRT-LLM's 29% longer (\u00b1 0.9%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 16,
+   "level": "L1",
+   "effect": 0.2891015663315657,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b16"
+   ],
+   "text": "0.6B, batch 16, the engine API (L1): SGLang has the shortest step, 2.26 ms; vLLM within noise of it; TensorRT-LLM's 29% longer (\u00b1 0.4%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 8,
+   "level": "L1",
+   "effect": 0.2352461522749565,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b8"
+   ],
+   "text": "1.7B, batch 8, the engine API (L1): vLLM has the shortest step, 2.67 ms; SGLang within noise of it; TensorRT-LLM's 24% longer (\u00b1 0.8%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "level": "L2",
+   "effect": 0.22356175538607337,
+   "cells": [
+    "sglang-0.5.20/defaults/L2/Qwen3-0.6B/b1",
+    "vllm-0.30.0/defaults/L2/Qwen3-0.6B/b1",
+    "sglang-0.5.20/defaults/L2/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/defaults/L2/Qwen3-0.6B/b1"
+   ],
+   "text": "0.6B, batch 1, the server (L2): SGLang has the shortest step, 1.51 ms; vLLM's 4.8% longer (\u00b1 1.2%, one SD); TensorRT-LLM's 22% longer (\u00b1 5.1%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "level": "L1",
+   "effect": 0.21650634557644977,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "0.6B, batch 1, the engine API (L1): SGLang has the shortest step, 1.51 ms; vLLM's 4.9% longer (\u00b1 1.1%, one SD); TensorRT-LLM's 22% longer (\u00b1 1.5%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 16,
+   "level": "L1",
+   "effect": 0.21473485222056654,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b16"
+   ],
+   "text": "1.7B, batch 16, the engine API (L1): vLLM has the shortest step, 3.00 ms; SGLang within noise of it; TensorRT-LLM's 21% longer (\u00b1 0.6%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 32,
+   "level": "L1",
+   "effect": 0.20762428371512387,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b32"
+   ],
+   "text": "0.6B, batch 32, the engine API (L1): SGLang has the shortest step, 2.97 ms; vLLM within noise of it; TensorRT-LLM's 21% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 4,
+   "level": "L1",
+   "effect": 0.20682266792245918,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b4"
+   ],
+   "text": "1.7B, batch 4, the engine API (L1): vLLM has the shortest step, 2.48 ms; SGLang within noise of it; TensorRT-LLM's 21% longer (\u00b1 1.1%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 2,
+   "level": "L1",
+   "effect": 0.18426520744853847,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b2"
+   ],
+   "text": "0.6B, batch 2, the engine API (L1): SGLang has the shortest step, 1.62 ms; vLLM within noise of it; TensorRT-LLM's 18% longer (\u00b1 1.1%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 32,
+   "level": "L1",
+   "effect": 0.17180274348224578,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b32"
+   ],
+   "text": "1.7B, batch 32, the engine API (L1): vLLM has the shortest step, 3.72 ms; SGLang within noise of it; TensorRT-LLM's 17% longer (\u00b1 0.5%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-4B",
+   "batch": 8,
+   "level": "L1",
+   "effect": 0.15683522855619314,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b8"
+   ],
+   "text": "4B, batch 8, the engine API (L1): vLLM has the shortest step, 4.75 ms; SGLang's 0.9% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 16% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 1,
+   "level": "L1",
+   "effect": 0.14745173019608027,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b1"
+   ],
+   "text": "1.7B, batch 1, the engine API (L1): SGLang has the shortest step, 2.29 ms; vLLM within noise of it; TensorRT-LLM's 15% longer (\u00b1 1.5%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-4B",
+   "batch": 16,
+   "level": "L1",
+   "effect": 0.14631712515809103,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b16"
+   ],
+   "text": "4B, batch 16, the engine API (L1): vLLM has the shortest step, 5.20 ms; SGLang within noise of it; TensorRT-LLM's 15% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-4B",
+   "batch": 16,
+   "level": "L2",
+   "effect": 0.14547550255688102,
+   "cells": [
+    "vllm-0.30.0/defaults/L2/Qwen3-4B/b16",
+    "trtllm-1.2.1/defaults/L2/Qwen3-4B/b16"
+   ],
+   "text": "4B, batch 16, the server (L2): vLLM has the shortest step, 5.20 ms; SGLang within noise of it; TensorRT-LLM's 15% longer (\u00b1 1.1%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 2,
+   "level": "L1",
+   "effect": 0.13342208832438707,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b2"
+   ],
+   "text": "1.7B, batch 2, the engine API (L1): vLLM has the shortest step, 2.38 ms; SGLang within noise of it; TensorRT-LLM's 13% longer (\u00b1 1.4%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-4B",
+   "batch": 4,
+   "level": "L1",
+   "effect": 0.13208107182352746,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b4"
+   ],
+   "text": "4B, batch 4, the engine API (L1): vLLM has the shortest step, 4.50 ms; SGLang's 0.9% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 13% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-4B",
+   "batch": 32,
+   "level": "L1",
+   "effect": 0.11648614013113034,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b32"
+   ],
+   "text": "4B, batch 32, the engine API (L1): vLLM has the shortest step, 6.19 ms; SGLang's 0.9% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 12% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-4B",
+   "batch": 32,
+   "level": "L2",
+   "effect": 0.11528409960153985,
+   "cells": [
+    "vllm-0.30.0/defaults/L2/Qwen3-4B/b32",
+    "trtllm-1.2.1/defaults/L2/Qwen3-4B/b32"
+   ],
+   "text": "4B, batch 32, the server (L2): vLLM has the shortest step, 6.20 ms; SGLang within noise of it; TensorRT-LLM's 12% longer (\u00b1 1.0%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 8,
+   "level": "L1",
+   "effect": 0.10424382152196476,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b8"
+   ],
+   "text": "8B, batch 8, the engine API (L1): vLLM has the shortest step, 7.07 ms; SGLang within noise of it; TensorRT-LLM's 10% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 64,
+   "level": "L1",
+   "effect": 0.10221043037669109,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b64"
+   ],
+   "text": "1.7B, batch 64, the engine API (L1): vLLM has the shortest step, 5.05 ms; SGLang's 3.2% longer (\u00b1 0.4%, one SD); TensorRT-LLM's 10% longer (\u00b1 0.4%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 16,
+   "level": "L1",
+   "effect": 0.0998136288102518,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b16"
+   ],
+   "text": "8B, batch 16, the engine API (L1): vLLM has the shortest step, 7.52 ms; SGLang within noise of it; TensorRT-LLM's 10% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 32,
+   "level": "L1",
+   "effect": 0.09970809678638215,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b32",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b32",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b32"
+   ],
+   "text": "8B, batch 32, the engine API (L1): vLLM has the shortest step, 8.34 ms; SGLang's 1.6% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 10% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 211,
+   "level": "L1",
+   "effect": 0.09803182209210326,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b211",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b211"
+   ],
+   "text": "14B, batch 211, the engine API (L1): vLLM has the shortest step, 25.96 ms; SGLang within noise of it; TensorRT-LLM's 10% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 64,
+   "level": "L1",
+   "effect": 0.09744837698738351,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b64"
+   ],
+   "text": "0.6B, batch 64, the engine API (L1): vLLM has the shortest step, 4.34 ms; SGLang within noise of it; TensorRT-LLM's 10% longer (\u00b1 0.4%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-4B",
+   "batch": 1,
+   "level": "L1",
+   "effect": 0.09079846676662995,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b1"
+   ],
+   "text": "4B, batch 1, the engine API (L1): SGLang has the shortest step, 4.21 ms; vLLM's 2.1% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 9.1% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 4,
+   "level": "L1",
+   "effect": 0.0854252214891944,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b4"
+   ],
+   "text": "8B, batch 4, the engine API (L1): vLLM has the shortest step, 6.82 ms; SGLang within noise of it; TensorRT-LLM's 8.5% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 128,
+   "level": "L1",
+   "effect": 0.08207387994683324,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b128"
+   ],
+   "text": "14B, batch 128, the engine API (L1): vLLM has the shortest step, 19.72 ms; SGLang's 1.2% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 8.2% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-4B",
+   "batch": 2,
+   "level": "L1",
+   "effect": 0.07759224813222887,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b2"
+   ],
+   "text": "4B, batch 2, the engine API (L1): vLLM has the shortest step, 4.35 ms; SGLang within noise of it; TensorRT-LLM's 7.8% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 16,
+   "level": "L2",
+   "effect": 0.07654661563280718,
+   "cells": [
+    "vllm-0.30.0/defaults/L2/Qwen3-14B/b16",
+    "trtllm-1.2.1/defaults/L2/Qwen3-14B/b16"
+   ],
+   "text": "14B, batch 16, the server (L2): vLLM has the shortest step, 12.04 ms; SGLang within noise of it; TensorRT-LLM's 7.7% longer (\u00b1 1.1%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 8,
+   "level": "L1",
+   "effect": 0.07649882584134526,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b8"
+   ],
+   "text": "14B, batch 8, the engine API (L1): vLLM has the shortest step, 11.65 ms; SGLang within noise of it; TensorRT-LLM's 7.6% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 16,
+   "level": "L1",
+   "effect": 0.07618512370026731,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b16"
+   ],
+   "text": "14B, batch 16, the engine API (L1): vLLM has the shortest step, 12.04 ms; SGLang within noise of it; TensorRT-LLM's 7.6% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 64,
+   "level": "L1",
+   "effect": 0.07415745093983661,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b64"
+   ],
+   "text": "14B, batch 64, the engine API (L1): vLLM has the shortest step, 15.42 ms; SGLang within noise of it; TensorRT-LLM's 7.4% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 32,
+   "level": "L1",
+   "effect": 0.07380133203430717,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b32",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b32"
+   ],
+   "text": "14B, batch 32, the engine API (L1): vLLM has the shortest step, 13.18 ms; SGLang within noise of it; TensorRT-LLM's 7.4% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 64,
+   "level": "L2",
+   "effect": 0.0732130937481088,
+   "cells": [
+    "vllm-0.30.0/defaults/L2/Qwen3-14B/b64",
+    "trtllm-1.2.1/defaults/L2/Qwen3-14B/b64"
+   ],
+   "text": "14B, batch 64, the server (L2): vLLM has the shortest step, 15.41 ms; SGLang within noise of it; TensorRT-LLM's 7.3% longer (\u00b1 1.0%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 32,
+   "level": "L2",
+   "effect": 0.07299315646322513,
+   "cells": [
+    "vllm-0.30.0/defaults/L2/Qwen3-14B/b32",
+    "trtllm-1.2.1/defaults/L2/Qwen3-14B/b32"
+   ],
+   "text": "14B, batch 32, the server (L2): vLLM has the shortest step, 13.19 ms; SGLang within noise of it; TensorRT-LLM's 7.3% longer (\u00b1 1.0%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 4,
+   "level": "L1",
+   "effect": 0.0633281107651098,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-14B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b4"
+   ],
+   "text": "14B, batch 4, the engine API (L1): vLLM has the shortest step, 11.35 ms; SGLang within noise of it; TensorRT-LLM's 6.3% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 1,
+   "level": "L1",
+   "effect": 0.06196753218947837,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b1"
+   ],
+   "text": "8B, batch 1, the engine API (L1): SGLang has the shortest step, 6.48 ms; vLLM's 1.9% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 6.2% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-4B",
+   "batch": 64,
+   "level": "L1",
+   "effect": 0.06170290805031442,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b64"
+   ],
+   "text": "4B, batch 64, the engine API (L1): vLLM has the shortest step, 7.86 ms; SGLang's 1.2% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 6.2% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 64,
+   "level": "L1",
+   "effect": 0.054812437977419304,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b64",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b64",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b64"
+   ],
+   "text": "8B, batch 64, the engine API (L1): vLLM has the shortest step, 10.19 ms; SGLang's 1.4% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 5.5% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 2,
+   "level": "L1",
+   "effect": 0.04777304678727501,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b2"
+   ],
+   "text": "8B, batch 2, the engine API (L1): vLLM has the shortest step, 6.67 ms; SGLang within noise of it; TensorRT-LLM's 4.8% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-32B",
+   "batch": 8,
+   "level": "L1",
+   "effect": 0.04719919752619983,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b8",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b8",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b8",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b8"
+   ],
+   "text": "32B, batch 8, the engine API (L1): vLLM has the shortest step, 25.05 ms; SGLang's 2.1% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 4.7% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-32B",
+   "batch": 16,
+   "level": "L1",
+   "effect": 0.04235038159527793,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b16",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b16"
+   ],
+   "text": "32B, batch 16, the engine API (L1): SGLang has the shortest step, 25.71 ms; vLLM within noise of it; TensorRT-LLM's 4.2% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 128,
+   "level": "L1",
+   "effect": 0.042281362180637716,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b128"
+   ],
+   "text": "0.6B, batch 128, the engine API (L1): vLLM has the shortest step, 6.92 ms; SGLang's 2.4% longer (\u00b1 0.4%, one SD); TensorRT-LLM's 4.2% longer (\u00b1 0.4%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 128,
+   "level": "L1",
+   "effect": 0.041935797447072876,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b128"
+   ],
+   "text": "1.7B, batch 128, the engine API (L1): vLLM has the shortest step, 7.72 ms; SGLang's 3.2% longer (\u00b1 0.4%, one SD); TensorRT-LLM's 4.2% longer (\u00b1 0.4%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 1,
+   "level": "L1",
+   "effect": 0.041337315411161146,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b1"
+   ],
+   "text": "14B, batch 1, the engine API (L1): SGLang has the shortest step, 11.02 ms; vLLM within noise of it; TensorRT-LLM's 4.1% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-32B",
+   "batch": 4,
+   "level": "L1",
+   "effect": 0.03968294863355615,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b4",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b4",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b4",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b4"
+   ],
+   "text": "32B, batch 4, the engine API (L1): SGLang has the shortest step, 24.48 ms; vLLM's 2.5% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 4.0% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-14B",
+   "batch": 2,
+   "level": "L1",
+   "effect": 0.030245141670339315,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-14B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-14B/b2"
+   ],
+   "text": "14B, batch 2, the engine API (L1): SGLang has the shortest step, 11.26 ms; vLLM within noise of it; TensorRT-LLM's 3.0% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-32B",
+   "batch": 1,
+   "level": "L1",
+   "effect": 0.03023873421247192,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b1",
+    "vllm-0.30.0/defaults/L1/Qwen3-32B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b1",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b1"
+   ],
+   "text": "32B, batch 1, the engine API (L1): SGLang has the shortest step, 23.75 ms; vLLM's 1.5% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 3.0% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-4B",
+   "batch": 128,
+   "level": "L1",
+   "effect": 0.02807377109218323,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-4B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-4B/b128"
+   ],
+   "text": "4B, batch 128, the engine API (L1): vLLM has the shortest step, 11.39 ms; SGLang's 2.5% longer (\u00b1 0.3%, one SD); TensorRT-LLM's 2.8% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 256,
+   "level": "L1",
+   "effect": 0.026304769708329623,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b256"
+   ],
+   "text": "1.7B, batch 256, the engine API (L1): vLLM has the shortest step, 13.16 ms; TensorRT-LLM's 2.0% longer (\u00b1 0.4%, one SD); SGLang's 2.6% longer (\u00b1 0.4%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 256,
+   "level": "L1",
+   "effect": 0.02203529360615919,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b256",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b256",
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b256",
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b256"
+   ],
+   "text": "0.6B, batch 256, the engine API (L1): vLLM has the shortest step, 12.20 ms; SGLang's 1.8% longer (\u00b1 0.4%, one SD); TensorRT-LLM's 2.2% longer (\u00b1 0.4%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 128,
+   "level": "L1",
+   "effect": 0.02017292468888976,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b128",
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b128",
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b128",
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b128"
+   ],
+   "text": "8B, batch 128, the engine API (L1): vLLM has the shortest step, 13.76 ms; TensorRT-LLM's 1.8% longer (\u00b1 0.3%, one SD); SGLang's 2.0% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "engines",
+   "model": "Qwen/Qwen3-32B",
+   "batch": 2,
+   "level": "L1",
+   "effect": 0.018939092505550148,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-32B/b2",
+    "trtllm-1.2.1/defaults/L1/Qwen3-32B/b2"
+   ],
+   "text": "32B, batch 2, the engine API (L1): SGLang has the shortest step, 24.16 ms; vLLM within noise of it; TensorRT-LLM's 1.9% longer (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 7.512089587982905,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "SGLang, 0.6B, batch 1, with CUDA graphs off: the step is 8.5x as long; the GPU busy 11% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 7.048824236317012,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 1, with CUDA graphs off: the step is 8.0x as long; the GPU busy 11% of it, against 97%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 6.138710393291983,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "vLLM, 0.6B, batch 1, with CUDA graphs off: the step is 7.1x as long; the GPU busy 13% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 8,
+   "effect": 6.094035002437002,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b8",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-0.6B/b8"
+   ],
+   "text": "SGLang, 0.6B, batch 8, with CUDA graphs off: the step is 7.1x as long; the GPU busy 13% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 8,
+   "effect": 4.95520823642873,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b8",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-0.6B/b8"
+   ],
+   "text": "vLLM, 0.6B, batch 8, with CUDA graphs off: the step is 6.0x as long; the GPU busy 16% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 8,
+   "effect": 4.820530060302705,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b8",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-0.6B/b8"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 8, with CUDA graphs off: the step is 5.8x as long; the GPU busy 14% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 1,
+   "effect": 4.761126152628591,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b1",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-1.7B/b1"
+   ],
+   "text": "SGLang, 1.7B, batch 1, with CUDA graphs off: the step is 5.8x as long; the GPU busy 16% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 1,
+   "effect": 4.6580275462190475,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b1",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-1.7B/b1"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 1, with CUDA graphs off: the step is 5.7x as long; the GPU busy 16% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 8,
+   "effect": 4.205543607196121,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b8",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-1.7B/b8"
+   ],
+   "text": "SGLang, 1.7B, batch 8, with CUDA graphs off: the step is 5.2x as long; the GPU busy 18% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 1,
+   "effect": 3.6764000900095803,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b1",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-1.7B/b1"
+   ],
+   "text": "vLLM, 1.7B, batch 1, with CUDA graphs off: the step is 4.7x as long; the GPU busy 20% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 8,
+   "effect": 3.586269659618102,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b8",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-1.7B/b8"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 8, with CUDA graphs off: the step is 4.6x as long; the GPU busy 19% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 8,
+   "effect": 3.1232157378236334,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b8",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-1.7B/b8"
+   ],
+   "text": "vLLM, 1.7B, batch 8, with CUDA graphs off: the step is 4.1x as long; the GPU busy 23% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 64,
+   "effect": 2.524232834676912,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b64",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-0.6B/b64"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 64, with CUDA graphs off: the step is 3.5x as long; the GPU busy 28% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 64,
+   "effect": 2.296259177539807,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b64",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-0.6B/b64"
+   ],
+   "text": "SGLang, 0.6B, batch 64, with CUDA graphs off: the step is 3.3x as long; the GPU busy 30% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 64,
+   "effect": 1.9717488309539086,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b64",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-1.7B/b64"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 64, with CUDA graphs off: the step is 3.0x as long; the GPU busy 33% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 64,
+   "effect": 1.8819941032601242,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b64",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-0.6B/b64"
+   ],
+   "text": "vLLM, 0.6B, batch 64, with CUDA graphs off: the step is 2.9x as long; the GPU busy 34% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 64,
+   "effect": 1.8292703681608842,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b64",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-1.7B/b64"
+   ],
+   "text": "SGLang, 1.7B, batch 64, with CUDA graphs off: the step is 2.8x as long; the GPU busy 35% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 1,
+   "effect": 1.6213203556261457,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b1",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-8B/b1"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 1, with CUDA graphs off: the step is 2.6x as long; the GPU busy 37% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 1,
+   "effect": 1.5043517935457835,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b1",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-8B/b1"
+   ],
+   "text": "SGLang, 8B, batch 1, with CUDA graphs off: the step is 2.5x as long; the GPU busy 39% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 8,
+   "effect": 1.4468392543830162,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b8",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-8B/b8"
+   ],
+   "text": "SGLang, 8B, batch 8, with CUDA graphs off: the step is 2.4x as long; the GPU busy 40% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 8,
+   "effect": 1.3269400939075382,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b8",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-8B/b8"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 8, with CUDA graphs off: the step is 2.3x as long; the GPU busy 40% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 64,
+   "effect": 1.311799000281702,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b64",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-1.7B/b64"
+   ],
+   "text": "vLLM, 1.7B, batch 64, with CUDA graphs off: the step is 2.3x as long; the GPU busy 43% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 64,
+   "effect": 0.8455451922838637,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b64",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-8B/b64"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 64, with CUDA graphs off: the step is 1.8x as long; the GPU busy 54% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 64,
+   "effect": 0.7306547470692022,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b64",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-8B/b64"
+   ],
+   "text": "SGLang, 8B, batch 64, with CUDA graphs off: the step is 1.7x as long; the GPU busy 57% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 1,
+   "effect": 0.7120424541448165,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-8B/b1"
+   ],
+   "text": "vLLM, 8B, batch 1, with CUDA graphs off: the step is 1.7x as long; the GPU busy 57% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 256,
+   "effect": 0.6586719052657621,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b256",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-0.6B/b256"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 256, with CUDA graphs off: the step is 1.7x as long; the GPU busy 60% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 8,
+   "effect": 0.6258621952223362,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b8",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-8B/b8"
+   ],
+   "text": "vLLM, 8B, batch 8, with CUDA graphs off: the step is 1.6x as long; the GPU busy 60% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 0.5984617364100857,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "vLLM, 0.6B, batch 1, with async scheduling off: the step is 1.6x as long; the GPU busy 62% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 8,
+   "effect": 0.5680233314320042,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b8",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b8"
+   ],
+   "text": "vLLM, 0.6B, batch 8, with async scheduling off: the step is 1.6x as long; the GPU busy 63% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 0.5491378676994709,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 1, with the overlap scheduler off: the step is 1.5x as long; the GPU busy 62% of it, against 97%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 256,
+   "effect": 0.5252075579862727,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b256",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-1.7B/b256"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 256, with CUDA graphs off: the step is 1.5x as long; the GPU busy 65% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 0.5088302610415891,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "SGLang, 0.6B, batch 1, with the overlap scheduler off: the step is 1.5x as long; the GPU busy 66% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 8,
+   "effect": 0.47875975590619424,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b8",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b8"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 8, with the overlap scheduler off: the step is 48% longer (\u00b1 1.9%, one SD); the GPU busy 66% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 64,
+   "effect": 0.47871731176488863,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b64",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b64"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 64, with the overlap scheduler off: the step is 48% longer (\u00b1 1.1%, one SD); the GPU busy 67% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 256,
+   "effect": 0.4654547846205297,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b256",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b256"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 256, with the overlap scheduler off: the step is 47% longer (\u00b1 1.1%, one SD); the GPU busy 67% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 256,
+   "effect": 0.4360425274256954,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b256",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b256"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 256, with the overlap scheduler off: the step is 44% longer (\u00b1 1.1%, one SD); the GPU busy 69% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 8,
+   "effect": 0.43557605656107845,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b8",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b8"
+   ],
+   "text": "SGLang, 0.6B, batch 8, with the overlap scheduler off: the step is 44% longer (\u00b1 0.4%, one SD); the GPU busy 70% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 1,
+   "effect": 0.4177630008648867,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b1",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b1"
+   ],
+   "text": "vLLM, 1.7B, batch 1, with async scheduling off: the step is 42% longer (\u00b1 4.9%, one SD); the GPU busy 69% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 8,
+   "effect": 0.40944622091136007,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b8",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b8"
+   ],
+   "text": "vLLM, 1.7B, batch 8, with async scheduling off: the step is 41% longer (\u00b1 4.2%, one SD); the GPU busy 70% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 64,
+   "effect": 0.40121673824833604,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b64",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b64"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 64, with the overlap scheduler off: the step is 40% longer (\u00b1 1.1%, one SD); the GPU busy 71% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 64,
+   "effect": 0.387272422482529,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b64",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b64"
+   ],
+   "text": "vLLM, 0.6B, batch 64, with async scheduling off: the step is 39% longer (\u00b1 3.7%, one SD); the GPU busy 72% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 1,
+   "effect": 0.37342271012719186,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b1",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b1"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 1, with the overlap scheduler off: the step is 37% longer (\u00b1 3.3%, one SD); the GPU busy 71% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 8,
+   "effect": 0.3503694611680819,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b8",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b8"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 8, with the overlap scheduler off: the step is 35% longer (\u00b1 1.9%, one SD); the GPU busy 73% of it, against 98%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 64,
+   "effect": 0.33580699134379266,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b64",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b64"
+   ],
+   "text": "vLLM, 1.7B, batch 64, with async scheduling off: the step is 34% longer (\u00b1 3.7%, one SD); the GPU busy 74% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 256,
+   "effect": 0.32211627213434935,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b256",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b256"
+   ],
+   "text": "vLLM, 0.6B, batch 256, with async scheduling off: the step is 32% longer (\u00b1 3.7%, one SD); the GPU busy 75% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 1,
+   "effect": 0.3119507489506166,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b1",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b1"
+   ],
+   "text": "SGLang, 1.7B, batch 1, with the overlap scheduler off: the step is 31% longer (\u00b1 0.5%, one SD); the GPU busy 76% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 256,
+   "effect": 0.3053394323904919,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b256",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b256"
+   ],
+   "text": "vLLM, 1.7B, batch 256, with async scheduling off: the step is 31% longer (\u00b1 3.7%, one SD); the GPU busy 76% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 256,
+   "effect": 0.30090163620329613,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b256",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-0.6B/b256"
+   ],
+   "text": "SGLang, 0.6B, batch 256, with CUDA graphs off: the step is 30% longer (\u00b1 0.4%, one SD); the GPU busy 77% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 8,
+   "effect": 0.299685611955419,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b8",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b8"
+   ],
+   "text": "SGLang, 1.7B, batch 8, with the overlap scheduler off: the step is 30% longer (\u00b1 0.4%, one SD); the GPU busy 77% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 64,
+   "effect": 0.2931876235880335,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b64",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b64"
+   ],
+   "text": "SGLang, 0.6B, batch 64, with the overlap scheduler off: the step is 29% longer (\u00b1 0.4%, one SD); the GPU busy 77% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 256,
+   "effect": 0.25874432681532356,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b256",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b256"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 256, with the overlap scheduler off: the step is 26% longer (\u00b1 1.1%, one SD); the GPU busy 77% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 64,
+   "effect": 0.2438218736240092,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b64",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b64"
+   ],
+   "text": "SGLang, 1.7B, batch 64, with the overlap scheduler off: the step is 24% longer (\u00b1 0.4%, one SD); the GPU busy 80% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 256,
+   "effect": 0.22890251027510677,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b256",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b256"
+   ],
+   "text": "SGLang, 0.6B, batch 256, with the overlap scheduler off: the step is 23% longer (\u00b1 0.4%, one SD); the GPU busy 82% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 64,
+   "effect": 0.2126143860309846,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b64",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b64"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 64, with the overlap scheduler off: the step is 21% longer (\u00b1 1.1%, one SD); the GPU busy 83% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 256,
+   "effect": 0.21147489714080359,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b256",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-1.7B/b256"
+   ],
+   "text": "SGLang, 1.7B, batch 256, with CUDA graphs off: the step is 21% longer (\u00b1 0.4%, one SD); the GPU busy 82% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 256,
+   "effect": 0.20763105359325484,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b256",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-0.6B/b256"
+   ],
+   "text": "vLLM, 0.6B, batch 256, with CUDA graphs off: the step is 21% longer (\u00b1 3.7%, one SD); the GPU busy 82% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 256,
+   "effect": 0.20227729684836948,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b256",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b256"
+   ],
+   "text": "SGLang, 1.7B, batch 256, with the overlap scheduler off: the step is 20% longer (\u00b1 0.4%, one SD); the GPU busy 83% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 64,
+   "effect": 0.17416828109587446,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b64",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b64"
+   ],
+   "text": "vLLM, 8B, batch 64, with async scheduling off: the step is 17% longer (\u00b1 3.7%, one SD); the GPU busy 85% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 64,
+   "effect": 0.16910204204945933,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b64",
+    "vllm-0.30.0/graphs-off/L1/Qwen3-8B/b64"
+   ],
+   "text": "vLLM, 8B, batch 64, with CUDA graphs off: the step is 17% longer (\u00b1 3.7%, one SD); the GPU busy 85% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 256,
+   "effect": 0.16680916365379517,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b256",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b256"
+   ],
+   "text": "vLLM, 8B, batch 256, with async scheduling off: the step is 17% longer (\u00b1 3.7%, one SD); the GPU busy 84% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 1,
+   "effect": 0.15973670011036734,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b1",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b1"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 1, with the overlap scheduler off: the step is 16% longer (\u00b1 3.0%, one SD); the GPU busy 86% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 8,
+   "effect": 0.15893180877689428,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b8",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b8"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 8, with the overlap scheduler off: the step is 16% longer (\u00b1 1.8%, one SD); the GPU busy 86% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 1,
+   "effect": 0.14682858033670732,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b1"
+   ],
+   "text": "vLLM, 8B, batch 1, with async scheduling off: the step is 15% longer (\u00b1 4.8%, one SD); the GPU busy 87% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 8,
+   "effect": 0.14642945258901197,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b8",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b8"
+   ],
+   "text": "vLLM, 8B, batch 8, with async scheduling off: the step is 15% longer (\u00b1 4.2%, one SD); the GPU busy 87% of it, against 99%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 64,
+   "effect": 0.12245036819047717,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b64",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b64"
+   ],
+   "text": "SGLang, 8B, batch 64, with the overlap scheduler off: the step is 12% longer (\u00b1 0.4%, one SD); the GPU busy 89% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 1,
+   "effect": 0.11989549780220088,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b1",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b1"
+   ],
+   "text": "SGLang, 8B, batch 1, with the overlap scheduler off: the step is 12% longer (\u00b1 0.5%, one SD); the GPU busy 89% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 8,
+   "effect": 0.11821379886971317,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b8",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b8"
+   ],
+   "text": "SGLang, 8B, batch 8, with the overlap scheduler off: the step is 12% longer (\u00b1 0.4%, one SD); the GPU busy 90% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 256,
+   "effect": 0.1119995754673202,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b256",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b256"
+   ],
+   "text": "SGLang, 8B, batch 256, with the overlap scheduler off: the step is 11% longer (\u00b1 0.4%, one SD); the GPU busy 89% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 256,
+   "effect": 0.08454224225689533,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b256",
+    "trtllm-1.2.1/graphs-off/L1/Qwen3-8B/b256"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 256, with CUDA graphs off: the step is 8.5% longer (\u00b1 1.1%, one SD); the GPU busy 91% of it, against 100%."
+  },
+  {
+   "kind": "mitigations",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 256,
+   "effect": 0.012627441751928314,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b256",
+    "sglang-0.5.20/graphs-off/L1/Qwen3-8B/b256"
+   ],
+   "text": "SGLang, 8B, batch 256, with CUDA graphs off: the step is 1.3% longer (\u00b1 0.4%, one SD); the GPU busy 98% of it, against 100%."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 256,
+   "effect": 0.023047036938016685,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b256",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b256"
+   ],
+   "text": "vLLM, 8B, batch 256, async scheduling off: the GPU's busy time per step held (-2.3%) while the step changed by 17%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 256,
+   "effect": 0.018479205883624727,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b256",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b256"
+   ],
+   "text": "SGLang, 8B, batch 256, overlap scheduler off: the GPU's busy time per step held (-1.8%) while the step changed by 11%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 256,
+   "effect": 0.008804527190890754,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b256",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b256"
+   ],
+   "text": "vLLM, 1.7B, batch 256, async scheduling off: the GPU's busy time per step held (-0.9%) while the step changed by 31%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 256,
+   "effect": 0.007389567831092125,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b256",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b256"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 256, overlap scheduler off: the GPU's busy time per step held (-0.7%) while the step changed by 26%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 256,
+   "effect": 0.007238359911555192,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b256",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b256"
+   ],
+   "text": "SGLang, 1.7B, batch 256, overlap scheduler off: the GPU's busy time per step held (-0.7%) while the step changed by 20%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 256,
+   "effect": 0.0035953580078389447,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b256",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b256"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 256, overlap scheduler off: the GPU's busy time per step held (0.4%) while the step changed by 47%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 256,
+   "effect": 0.003473845533869646,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b256",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b256"
+   ],
+   "text": "vLLM, 0.6B, batch 256, async scheduling off: the GPU's busy time per step held (-0.3%) while the step changed by 32%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 1,
+   "effect": 0.0033930518511032792,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b1",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b1"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 1, overlap scheduler off: the GPU's busy time per step held (-0.3%) while the step changed by 37%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 1,
+   "effect": 0.00311099644255719,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b1",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b1"
+   ],
+   "text": "vLLM, 8B, batch 1, async scheduling off: the GPU's busy time per step held (-0.3%) while the step changed by 15%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 1,
+   "effect": 0.0026267110726975185,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b1",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b1"
+   ],
+   "text": "SGLang, 1.7B, batch 1, overlap scheduler off: the GPU's busy time per step held (-0.3%) while the step changed by 31%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 8,
+   "effect": 0.002569433641359531,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b8",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b8"
+   ],
+   "text": "vLLM, 8B, batch 8, async scheduling off: the GPU's busy time per step held (-0.3%) while the step changed by 15%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 8,
+   "effect": 0.0023855656576521334,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b8",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b8"
+   ],
+   "text": "vLLM, 1.7B, batch 8, async scheduling off: the GPU's busy time per step held (-0.2%) while the step changed by 41%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 8,
+   "effect": 0.0020268753412748808,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b8",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b8"
+   ],
+   "text": "SGLang, 0.6B, batch 8, overlap scheduler off: the GPU's busy time per step held (0.2%) while the step changed by 44%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 0.001979269641145587,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "SGLang, 0.6B, batch 1, overlap scheduler off: the GPU's busy time per step held (0.2%) while the step changed by 51%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 256,
+   "effect": 0.0017258530240207293,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b256",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b256"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 256, overlap scheduler off: the GPU's busy time per step held (0.2%) while the step changed by 44%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 64,
+   "effect": 0.0016441393194992493,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b64",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b64"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 64, overlap scheduler off: the GPU's busy time per step held (0.2%) while the step changed by 40%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 64,
+   "effect": 0.0016156702517304833,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-8B/b64",
+    "vllm-0.30.0/async-off/L1/Qwen3-8B/b64"
+   ],
+   "text": "vLLM, 8B, batch 64, async scheduling off: the GPU's busy time per step held (-0.2%) while the step changed by 17%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 0.001420992025453538,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b1",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 1, overlap scheduler off: the GPU's busy time per step held (-0.1%) while the step changed by 55%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 64,
+   "effect": 0.0012650840155012943,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b64",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b64"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 64, overlap scheduler off: the GPU's busy time per step held (0.1%) while the step changed by 48%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 8,
+   "effect": 0.0011970945690634727,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b8",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b8"
+   ],
+   "text": "SGLang, 1.7B, batch 8, overlap scheduler off: the GPU's busy time per step held (-0.1%) while the step changed by 30%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 8,
+   "effect": 0.0011840297478683537,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-1.7B/b8",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-1.7B/b8"
+   ],
+   "text": "TensorRT-LLM, 1.7B, batch 8, overlap scheduler off: the GPU's busy time per step held (-0.1%) while the step changed by 35%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 8,
+   "effect": 0.0011361010107761027,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b8",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b8"
+   ],
+   "text": "vLLM, 0.6B, batch 8, async scheduling off: the GPU's busy time per step held (-0.1%) while the step changed by 57%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 64,
+   "effect": 0.0009206830476906624,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b64",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b64"
+   ],
+   "text": "vLLM, 1.7B, batch 64, async scheduling off: the GPU's busy time per step held (-0.1%) while the step changed by 34%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 64,
+   "effect": 0.0008858339092384648,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b64",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b64"
+   ],
+   "text": "vLLM, 0.6B, batch 64, async scheduling off: the GPU's busy time per step held (-0.1%) while the step changed by 39%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 1,
+   "effect": 0.0008527096730717165,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b1",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b1"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 1, overlap scheduler off: the GPU's busy time per step held (-0.1%) while the step changed by 16%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 64,
+   "effect": 0.0008088938455028671,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b64",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b64"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 64, overlap scheduler off: the GPU's busy time per step held (0.1%) while the step changed by 21%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 64,
+   "effect": 0.00074768203126796,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b64",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b64"
+   ],
+   "text": "SGLang, 0.6B, batch 64, overlap scheduler off: the GPU's busy time per step held (-0.1%) while the step changed by 29%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 1,
+   "effect": 0.0007041807006937795,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-0.6B/b1",
+    "vllm-0.30.0/async-off/L1/Qwen3-0.6B/b1"
+   ],
+   "text": "vLLM, 0.6B, batch 1, async scheduling off: the GPU's busy time per step held (-0.1%) while the step changed by 60%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 8,
+   "effect": 0.0006815588928906768,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-8B/b8",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-8B/b8"
+   ],
+   "text": "TensorRT-LLM, 8B, batch 8, overlap scheduler off: the GPU's busy time per step held (-0.1%) while the step changed by 16%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 64,
+   "effect": 0.0006221321726866957,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b64",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b64"
+   ],
+   "text": "SGLang, 8B, batch 64, overlap scheduler off: the GPU's busy time per step held (-0.1%) while the step changed by 12%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 8,
+   "effect": 0.0005930153219417811,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b8",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b8"
+   ],
+   "text": "SGLang, 8B, batch 8, overlap scheduler off: the GPU's busy time per step held (0.1%) while the step changed by 12%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 64,
+   "effect": 0.0005754261954725726,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b64",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-1.7B/b64"
+   ],
+   "text": "SGLang, 1.7B, batch 64, overlap scheduler off: the GPU's busy time per step held (-0.1%) while the step changed by 24%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "vllm",
+   "model": "Qwen/Qwen3-1.7B",
+   "batch": 1,
+   "effect": 0.0004870433080016445,
+   "cells": [
+    "vllm-0.30.0/defaults/L1/Qwen3-1.7B/b1",
+    "vllm-0.30.0/async-off/L1/Qwen3-1.7B/b1"
+   ],
+   "text": "vLLM, 1.7B, batch 1, async scheduling off: the GPU's busy time per step held (-0.0%) while the step changed by 42%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 256,
+   "effect": 0.000446238707075719,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b256",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-0.6B/b256"
+   ],
+   "text": "SGLang, 0.6B, batch 256, overlap scheduler off: the GPU's busy time per step held (-0.0%) while the step changed by 23%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "sglang",
+   "model": "Qwen/Qwen3-8B",
+   "batch": 1,
+   "effect": 0.00042420097155759784,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-8B/b1",
+    "sglang-0.5.20/overlap-off/L1/Qwen3-8B/b1"
+   ],
+   "text": "SGLang, 8B, batch 1, overlap scheduler off: the GPU's busy time per step held (0.0%) while the step changed by 12%, so the change is the host's."
+  },
+  {
+   "kind": "attribution",
+   "engine": "trtllm",
+   "model": "Qwen/Qwen3-0.6B",
+   "batch": 8,
+   "effect": 0.00021548534164617106,
+   "cells": [
+    "trtllm-1.2.1/defaults/L1/Qwen3-0.6B/b8",
+    "trtllm-1.2.1/overlap-off/L1/Qwen3-0.6B/b8"
+   ],
+   "text": "TensorRT-LLM, 0.6B, batch 8, overlap scheduler off: the GPU's busy time per step held (-0.0%) while the step changed by 48%, so the change is the host's."
+  },
+  {
+   "kind": "stack",
+   "engine": "sglang",
+   "effect": 0.22643306715235934,
+   "cells": [
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b1",
+    "sglang-0.5.20/defaults/L0/Qwen3-0.6B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b16",
+    "sglang-0.5.20/defaults/L0/Qwen3-0.6B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-0.6B/b64",
+    "sglang-0.5.20/defaults/L0/Qwen3-0.6B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b1",
+    "sglang-0.5.20/defaults/L0/Qwen3-1.7B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b16",
+    "sglang-0.5.20/defaults/L0/Qwen3-1.7B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-1.7B/b64",
+    "sglang-0.5.20/defaults/L0/Qwen3-1.7B/b64",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b1",
+    "sglang-0.5.20/defaults/L0/Qwen3-4B/b1",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b16",
+    "sglang-0.5.20/defaults/L0/Qwen3-4B/b16",
+    "sglang-0.5.20/defaults/L1/Qwen3-4B/b64",
+    "sglang-0.5.20/defaults/L0/Qwen3-4B/b64"
+   ],
+   "text": "SGLang, the runner (L0) against the engine API (L1): beyond noise in all 9 cells; the largest at 0.6B, batch 1: 23% longer (\u00b1 0.8%, one SD)."
+  },
+  {
+   "kind": "stack",
+   "engine": "trtllm",
+   "effect": 0.007005136452395533,
+   "cells": [],
+   "text": "TensorRT-LLM, the server (L2) against the engine API (L1): within noise in all 9 cells; the largest at 0.6B, batch 1: 0.7% longer (\u00b1 5.3%, one SD)."
+  },
+  {
+   "kind": "stack",
+   "engine": "vllm",
+   "effect": -0.0025486089353394803,
+   "cells": [],
+   "text": "vLLM, the server (L2) against the engine API (L1): within noise in all 12 cells; the largest at 0.6B, batch 16: 0.3% shorter (\u00b1 1.1%, one SD)."
+  },
+  {
+   "kind": "stack",
+   "engine": "sglang",
+   "effect": -0.001517617608608468,
+   "cells": [],
+   "text": "SGLang, the server (L2) against the engine API (L1): within noise in all 12 cells; the largest at 0.6B, batch 32: 0.2% shorter (\u00b1 0.3%, one SD)."
+  },
+  {
+   "kind": "host",
+   "engine": "trtllm",
+   "effect": 1.0706980891721127,
+   "cells": [],
+   "text": "TensorRT-LLM with overlap switched off, where the host's time shows in every step: 1.07 ms a step (0.97\u20131.17) plus 19.6 \u00b5s a sequence, serial, from 12 cells."
+  },
+  {
+   "kind": "host",
+   "engine": "vllm",
+   "effect": 0.9941250747598565,
+   "cells": [],
+   "text": "vLLM with overlap switched off, where the host's time shows in every step: 0.99 ms a step (0.74\u20131.23) plus 12.1 \u00b5s a sequence, serial, from 12 cells."
+  },
+  {
+   "kind": "host",
+   "engine": "sglang",
+   "effect": 0.7665011610778781,
+   "cells": [],
+   "text": "SGLang with overlap switched off, where the host's time shows in every step: 0.77 ms a step (0.74\u20130.79) plus 7.7 \u00b5s a sequence, serial, from 12 cells."
+  }
+ ],
+ "stats": {
+  "comparisons": 247,
+  "expected_by_chance": 2.7098,
+  "k": 3,
+  "aa": {
+   "processes": {
+    "pairs": 570,
+    "beyond": 9,
+    "rate": 0.015789473684210527,
+    "expected": 0.013850877192982456
+   },
+   "sentinels": {
+    "pairs": 18,
+    "beyond": 2,
+    "rate": 0.1111111111111111
+   }
+  }
+ },
+ "summaries": {
+  "occ1": "At batch 1 the GPU is busy from 97% of the step (TensorRT-LLM, 0.6B) to 100% (SGLang, 32B).",
+  "occ64": "At batch 64 the GPU is busy from 99% of the step (TensorRT-LLM, 0.6B) to 100% (SGLang, 14B).",
+  "frontier": "The batch from which each engine keeps the GPU 90% busy: vLLM 1 (all 6 models); SGLang 1 (all 6 models); TensorRT-LLM 1 (all 6 models).",
+  "anatomy": {
+   "1": {
+    "sglang": "At batch 1, the floor is 28%\u201388% of the step across 6 models; above it, kernel excess is the largest part.",
+    "trtllm": "At batch 1, the floor is 23%\u201386% of the step across 6 models; above it, kernel excess is the largest part.",
+    "vllm": "At batch 1, the floor is 27%\u201387% of the step across 6 models; above it, kernel excess is the largest part."
+   },
+   "128": {
+    "sglang": "At batch 128, the floor is 76%\u201381% of the step across 5 models; above it, kernel excess is the largest part.",
+    "trtllm": "At batch 128, the floor is 74%\u201381% of the step across 5 models; above it, kernel excess is the largest part.",
+    "vllm": "At batch 128, the floor is 78%\u201382% of the step across 5 models; above it, kernel excess is the largest part."
+   },
+   "16": {
+    "sglang": "At batch 16, the floor is 45%\u201387% of the step across 6 models; above it, kernel excess is the largest part.",
+    "trtllm": "At batch 16, the floor is 35%\u201383% of the step across 6 models; above it, kernel excess is the largest part.",
+    "vllm": "At batch 16, the floor is 44%\u201387% of the step across 6 models; above it, kernel excess is the largest part."
+   },
+   "2": {
+    "sglang": "At batch 2, the floor is 29%\u201387% of the step across 6 models; above it, kernel excess is the largest part.",
+    "trtllm": "At batch 2, the floor is 24%\u201385% of the step across 6 models; above it, kernel excess is the largest part.",
+    "vllm": "At batch 2, the floor is 29%\u201387% of the step across 6 models; above it, kernel excess is the largest part."
+   },
+   "256": {
+    "sglang": "At batch 256, the floor is 81%\u201383% of the step across 4 models; above it, kernel excess is the largest part.",
+    "trtllm": "At batch 256, the floor is 81%\u201383% of the step across 4 models; above it, kernel excess is the largest part.",
+    "vllm": "At batch 256, the floor is 82%\u201385% of the step across 4 models; above it, kernel excess is the largest part."
+   },
+   "32": {
+    "sglang": "At batch 32, the floor is 55%\u201383% of the step across 5 models; above it, kernel excess is the largest part.",
+    "trtllm": "At batch 32, the floor is 46%\u201377% of the step across 5 models; above it, kernel excess is the largest part.",
+    "vllm": "At batch 32, the floor is 55%\u201383% of the step across 5 models; above it, kernel excess is the largest part."
+   },
+   "4": {
+    "sglang": "At batch 4, the floor is 31%\u201387% of the step across 6 models; above it, kernel excess is the largest part.",
+    "trtllm": "At batch 4, the floor is 24%\u201383% of the step across 6 models; above it, kernel excess is the largest part.",
+    "vllm": "At batch 4, the floor is 31%\u201385% of the step across 6 models; above it, kernel excess is the largest part."
+   },
+   "64": {
+    "sglang": "At batch 64, the floor is 66%\u201382% of the step across 5 models; above it, kernel excess is the largest part.",
+    "trtllm": "At batch 64, the floor is 61%\u201377% of the step across 5 models; above it, kernel excess is the largest part.",
+    "vllm": "At batch 64, the floor is 66%\u201382% of the step across 5 models; above it, kernel excess is the largest part."
+   },
+   "8": {
+    "sglang": "At batch 8, the floor is 36%\u201384% of the step across 6 models; above it, kernel excess is the largest part.",
+    "trtllm": "At batch 8, the floor is 27%\u201382% of the step across 6 models; above it, kernel excess is the largest part.",
+    "vllm": "At batch 8, the floor is 37%\u201386% of the step across 6 models; above it, kernel excess is the largest part."
+   },
+   "211": {
+    "sglang": "At batch 211, the floor is 80% of the step at 14B; above it, kernel excess is the largest part.",
+    "trtllm": "At batch 211, the floor is 73% of the step at 14B; above it, kernel excess is the largest part.",
+    "vllm": "At batch 211, the floor is 80% of the step at 14B; above it, kernel excess is the largest part."
+   }
+  },
+  "engines": {
+   "L1/1": "The slowest step here is 22% longer than the fastest; 10 of 18 gaps are beyond noise.",
+   "L2/1": "The slowest step here is 22% longer than the fastest; 2 of 9 gaps are beyond noise.",
+   "L1/2": "The slowest step here is 18% longer than the fastest; 6 of 18 gaps are beyond noise.",
+   "L1/4": "The slowest step here is 30% longer than the fastest; 8 of 18 gaps are beyond noise.",
+   "L1/8": "The slowest step here is 33% longer than the fastest; 8 of 18 gaps are beyond noise.",
+   "L1/16": "The slowest step here is 29% longer than the fastest; 6 of 18 gaps are beyond noise.",
+   "L2/16": "The slowest step here is 29% longer than the fastest; 3 of 9 gaps are beyond noise.",
+   "L1/32": "The slowest step here is 21% longer than the fastest; 7 of 15 gaps are beyond noise.",
+   "L2/32": "The slowest step here is 12% longer than the fastest; 2 of 8 gaps are beyond noise.",
+   "L1/64": "The slowest step here is 10% longer than the fastest; 8 of 15 gaps are beyond noise.",
+   "L2/64": "The slowest step here is 7.3% longer than the fastest; 1 of 7 gaps are beyond noise.",
+   "L1/128": "The slowest step here is 8.2% longer than the fastest; 10 of 15 gaps are beyond noise.",
+   "L1/256": "The slowest step here is 2.6% longer than the fastest; 4 of 12 gaps are beyond noise.",
+   "L1/211": "The slowest step here is 10% longer than the fastest; 1 of 3 gaps are beyond noise."
+  },
+  "mitigations": "84 cells with one mitigation changed; the largest change is CUDA graphs off on SGLang, 0.6B, batch 1: 8.5x as long.",
+  "stack": "42 cells at another level; the largest difference from the headline level is 23% (SGLang, the runner, 0.6B, batch 1).",
+  "map": {
+   "occupied": {
+    "vllm": "vLLM's GPU busy runs from 98% (0.6B, batch 16) to 100% (32B, batch 16) over 50 cells.",
+    "sglang": "SGLang's GPU busy runs from 99% (0.6B, batch 2) to 100% (32B, batch 16) over 50 cells.",
+    "trtllm": "TensorRT-LLM's GPU busy runs from 97% (0.6B, batch 1) to 100% (14B, batch 211) over 50 cells."
+   },
+   "sol": {
+    "vllm": "vLLM's speed of light runs from 27% (0.6B, batch 1) to 87% (32B, batch 1) over 50 cells.",
+    "sglang": "SGLang's speed of light runs from 28% (0.6B, batch 1) to 88% (32B, batch 1) over 50 cells.",
+    "trtllm": "TensorRT-LLM's speed of light runs from 23% (0.6B, batch 1) to 86% (32B, batch 1) over 50 cells."
+   },
+   "mbu": {
+    "vllm": "vLLM's bandwidth used runs from 27% (0.6B, batch 1) to 87% (32B, batch 1) over 50 cells.",
+    "sglang": "SGLang's bandwidth used runs from 28% (0.6B, batch 1) to 88% (32B, batch 1) over 50 cells.",
+    "trtllm": "TensorRT-LLM's bandwidth used runs from 23% (0.6B, batch 1) to 86% (32B, batch 1) over 50 cells."
+   },
+   "step_ms": {
+    "vllm": "vLLM's step time runs from 1.58 ms (0.6B, batch 1) to 25.96 ms (14B, batch 211) over 50 cells.",
+    "sglang": "SGLang's step time runs from 1.51 ms (0.6B, batch 1) to 26.12 ms (14B, batch 211) over 50 cells.",
+    "trtllm": "TensorRT-LLM's step time runs from 1.83 ms (0.6B, batch 1) to 28.51 ms (14B, batch 211) over 50 cells."
+   }
+  }
+ },
+ "exploratory": []
+}

@@ -1,0 +1,24 @@
+# AIPerf Server Metrics Export (CSV)
+# aiperf_version: 0.13.0
+# schema_version: 1.0
+# benchmark_id: e2d882be5e38
+# Note: Same benchmark_id and version appear in JSON and Parquet exports
+#
+Endpoint,Type,Metric,Unit,avg,min,max,std,p1,p5,p10,p25,p50,p75,p90,p95,p99,Description
+127.0.0.1:28765,gauge,llamacpp:n_busy_slots_per_decode,,3.6386,3.3333,3.8000,0.2013,3.3333,3.3333,3.3333,3.4458,3.7883,3.8000,3.8000,3.8000,3.8000,Average number of busy slots per llama_decode() call
+127.0.0.1:28765,gauge,llamacpp:predicted_tokens_seconds,tokens/s,9.6574,0.0000,164.1750,39.8183,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,32.8350,137.9070,Average generation throughput in tokens/s
+127.0.0.1:28765,gauge,llamacpp:prompt_tokens_seconds,tokens/s,82.6606,0.0000,1405.2300,340.8183,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,281.0460,1180.3932,Average prompt throughput in tokens/s
+127.0.0.1:28765,gauge,llamacpp:requests_deferred,,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,Number of requests deferred
+127.0.0.1:28765,gauge,llamacpp:requests_processing,,3.0000,0.0000,8.0000,3.8243,0.0000,0.0000,0.0000,0.0000,1.0000,8.0000,8.0000,8.0000,8.0000,Number of requests processing
+
+Endpoint,Type,Metric,Unit,total,rate,rate_avg,rate_min,rate_max,rate_std,Description
+127.0.0.1:28765,counter,llamacpp:n_decode,,288.0000,64.0114,,,,,"Total number of llama_decode() calls, excluding speculative decoding and multimodal decoding"
+127.0.0.1:28765,counter,llamacpp:n_tokens_max,,0.0000,0.0000,,,,,Largest observed sequence length (prompt + generation)
+127.0.0.1:28765,counter,llamacpp:prompt_seconds,seconds,0.0057,0.0013,,,,,Total time spent processing prompts
+127.0.0.1:28765,counter,llamacpp:prompt_tokens,tokens,8.0000,1.7781,,,,,"Number of prompt tokens processed, excluding cached tokens"
+127.0.0.1:28765,counter,llamacpp:prompt_tokens_cached,,7160.0000,1591.3952,,,,,Number of prompt tokens reused from the cache
+127.0.0.1:28765,counter,llamacpp:spec_decode_num_accepted_tokens,tokens,0.0000,0.0000,,,,,Speculative: Total draft tokens accepted by the target model
+127.0.0.1:28765,counter,llamacpp:spec_decode_num_draft_tokens,tokens,0.0000,0.0000,,,,,Speculative: Total draft tokens generated
+127.0.0.1:28765,counter,llamacpp:spec_decode_num_drafts,,0.0000,0.0000,,,,,Speculative: Total speculative decoding verification steps
+127.0.0.1:28765,counter,llamacpp:tokens_predicted,,2304.0000,512.0914,,,,,Number of generation tokens processed
+127.0.0.1:28765,counter,llamacpp:tokens_predicted_seconds,seconds,13.9851,3.1084,,,,,Total time spent generating tokens

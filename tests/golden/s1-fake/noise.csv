@@ -1,0 +1,5 @@
+session,engine,arm,level,model,batch,processes,invalid,reasons,step_ms,sd,range,start_to_end,within_range_max,occupied,occupied_processes,occupied_sd,occupied_invalid,occupied_reasons,process_steps
+S1-fake,llamacpp,defaults,L2,Qwen/Qwen3-0.6B,1,6,0,,12.039999666666667,0.0045309599363611616,0.012956810989944834,0.0059979451294012165,0.0,,0,,0,,12.072 12.12 12.036 12 12.048 11.964
+S1-fake,llamacpp,defaults,L2,Qwen/Qwen3-0.6B,8,5,1,"noise-end-p2: llama-server ran batch 8 in slots that are not one run (9-23, 8 distinct)",12.0239996,0.00352846530858406,0.00898203622694721,0.004165194935021654,0.0,,0,,0,,12.072 12.036 12 12.048 11.964
+S1-fake,vllm,defaults,L1,Qwen/Qwen3-0.6B,1,6,0,,10.033333166666667,0.004530958911460595,0.012956810846458552,0.0059979673442185355,0.0,0.8999999983383182,6,4.070272505676305e-09,0,,10.06 10.1 10.03 10 10.04 9.97
+S1-fake,vllm,defaults,L1,Qwen/Qwen3-0.6B,8,5,1,noise-end-p3: RuntimeError('out of KV'),10.034,0.00506215870009975,0.01295594977077925,0.007664111962679021,0.0,,0,,0,,10.06 10.1 10 10.04 9.97

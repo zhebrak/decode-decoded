@@ -1,0 +1,15 @@
+# The smoke grid on a rented H100 PCIe VM: the first run of the Docker path end to end, on a
+# card the study does not use. Everything the smoke run checks on the study's box is checked here first: nsys inside
+# the containers, the hostload contention in them, the DRAM counters, every server profiled, llama-server at 256 slots,
+# the clock lock on a root VM (this card tops out at 1755 MHz; the lock is judged where nothing slowed the clock, and
+# at 350 W the power cap holds it down on most GPU-bound cells: the clock rule's hardest case), the noise block's path,
+# the sentinels, the PDL chain with its three untraced passes, the uploads where a dataset is given.
+# validation: true marks every unit: another card, never study data, never anything but a preview on the page. The
+# card's peaks (servebench.physics) and the ruler's own bandwidth read its cells against itself.
+#   export BOX=<ssh alias> DA_SYNC=0 GRID=configs/grid/validation/pcie.yaml
+#   scripts/box.sh provision PCIE-<date> && scripts/box.sh wait && scripts/box.sh ruler PCIE-<date> && scripts/box.sh wait
+#   scripts/box.sh grid PCIE-<date> SMOKE --timeout 2400 && scripts/box.sh wait
+extends: configs/grid/validation/smoke-four-engines.yaml
+validation: true
+gpu: NVIDIA H100 PCIe
+clock_mhz: 1755                # the PCIe card's boost ceiling (the SXM's 1980 cannot be asked of it)

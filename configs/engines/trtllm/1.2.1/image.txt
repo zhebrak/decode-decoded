@@ -1,0 +1,2 @@
+nvcr.io/nvidia/tensorrt-llm/release:1.2.1
+nvcr.io/nvidia/tensorrt-llm/release@sha256:33cd085b772947bd22b7273886539331420404e5d2a4a039945241945ff927b9

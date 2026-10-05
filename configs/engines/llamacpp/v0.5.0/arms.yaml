@@ -1,0 +1,55 @@
+# llama.cpp v0.5.0 (released 2026-09-23, nightly b11146). Flags from tools/server and tools/batched-bench at the tag
+# and checked against help.txt. args are literal command-line flags (true = bare flag). The model is the bf16
+# GGUF converted from the same Hugging Face snapshot as the other engines (scripts/make_gguf.sh), so the bytes moved
+# per step match theirs.
+engine: llamacpp
+version: v0.5.0
+image: ghcr.io/ggml-org/llama.cpp:full-cuda-v0.5.0
+levels: [L0, L2]                   # no engine-level API: its engine is the server
+common:
+  # every arm's step anchor: the per-step copy to the host (the logits; under GPU sampling, the sampled tokens), not
+  # the graph launch. The step where the context reaches 1024 (896 + 128) grows the padded KV view and runs eagerly,
+  # with no launch, inside every trace window (65 steps read as 64: +1.5-2% a step); and with graphs off, get_rows
+  # runs twice a step (576 in 288 steps on the NVL's node trace) where the copy runs once
+  anchor: memcpy-dtoh
+  args:
+    -ngl: 999
+    -fa: "on"                      # -fa takes on|off|auto
+    -b: 8192
+    --seed: 0
+server_args:
+  --no-webui: true
+  --metrics: true
+  --cont-batching: true
+  --cache-ram: 0                   # no host prompt cache: by default (8192 MiB) llama-server saves every idle slot's
+                                   # KV to host RAM on each new request (cache_idle_slots, which requires cache-ram);
+                                   # at 256 slots that is ~30k slot saves per wave, enough to push a unit past its
+                                   # deadline. cache_prompt: false (below) does not stop it
+  --no-cache-idle-slots: true      # said outright, though cache-ram 0 already disables it
+server_per_batch: true             # a fresh llama-server for each batch of a unit, with a slot per sequence of that
+                                   # batch: on the pod one server of 256 slots ran batch 8 at 6.65 ms against 3.70
+                                   # fresh (GPU sampling; graphs off likewise) after batch 1. Its log shows why:
+                                   # kv_unified false, and batch 8's prompts (AIPerf's seed r again) sent sequences
+                                   # back to batch 1's slots by prompt similarity, so the batch sat in slots that were
+                                   # not one run ({239-245, 254}) and llama.cpp's graph reuse fell from 285 a wave to
+                                   # 1-6; with every slot in use the run is always whole (tidy checks it per wave)
+greedy_endpoint: /completion       # the agreement probe's (anatomy.served.greedy): token-id prompts, return_tokens
+request:                           # sent with every L2 request (AIPerf --extra-inputs, the stream client's body)
+  cache_prompt: false              # AIPerf's warm-up and profiling phases send the same prompts, and
+                                   # llama-server's slot cache served the second from the first (1 token prefilled)
+  samplers: [top_k]                # greedy, as on the other engines: the chain cut to top-k 1 and the final pick
+  top_k: 1                         # (temperature 0 alone still runs the whole CPU chain for each slot in turn, top-k
+                                   # 40 over 151,936 logits, top-p, min-p and the rest: 209.5 ms a step at 256 slots
+                                   # of 0.6B on an H100 SXM pod, its repeats 13% apart, against 199 ms greedy). Both
+                                   # have GPU forms, so gpu-sampling runs the same chain
+  timings_per_token: true          # every chunk carries timings.predicted_n, the server's own count: a character held
+                                   # back over two tokens arrives as one chunk, and its text alone would count one
+                                   # (its cost to the server is not resolved: 38.63 ms at 64 slots on the pod,
+                                   # 38.56 without, under the 0.6% between processes)
+arms:
+  defaults: {}                     # CUDA graphs on (also above batch 1 since b8082), sampling on the CPU
+  graphs-off:
+    env: {GGML_CUDA_DISABLE_GRAPHS: "1"}   # any value disables, even "0"
+  gpu-sampling:
+    levels: [L2]
+    args: {--backend-sampling: true}       # experimental GPU sampling path

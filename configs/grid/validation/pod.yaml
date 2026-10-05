@@ -1,0 +1,14 @@
+# The study's grid, unchanged (configs/grid/v1.yaml: every block, sentinel and noise cell), run as a validation on an
+# exclusive container-hosted H100 SXM pod before the study's VM: no Docker (--runtime native, the engines from pinned
+# venvs), no clock lock, a CPU quota of 6.8 cores (anatomy.grid uses 6). It rehearses the study at its full scale:
+# every model and batch, the S1 calibration and the S2 grid, the run path and the analysis, and how long it all takes.
+# validation: true marks every unit, so none of it is ever study data or anything but a preview on the page.
+#   DA_RUNTIME=native GRID=configs/grid/validation/pod.yaml scripts/session.sh S1|S2
+extends: configs/grid/v1.yaml
+validation: true
+clock_mhz: null                # a pod cannot lock clocks: the SM clock is logged per unit instead
+overrides:                     # NVLS fails in the pod's containers (single-GPU engines still initialise NCCL)
+  vllm: {env: {NCCL_NVLS_ENABLE: "0"}}
+  sglang: {env: {NCCL_NVLS_ENABLE: "0"}}
+  trtllm: {env: {NCCL_NVLS_ENABLE: "0"}}
+  llamacpp: {env: {NCCL_NVLS_ENABLE: "0"}}

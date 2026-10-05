@@ -1,0 +1,20 @@
+# A validation probe for S1 on the study's host. validation: true, so
+# none of it is study data, and its block, probe-slots-no-similarity, keys its unit apart from S1's own llama.cpp unit
+# of the same model (servebench.results.REPEATED). Probe: llamacpp-slots.yaml's shared server with llama-server's slot
+# choice by prompt similarity off (--slot-prompt-similarity 0).
+#   GRID=configs/grid/validation/probes/llamacpp-slots-no-similarity.yaml \
+#     scripts/session.sh S1 --block probe-slots-no-similarity
+extends: configs/grid/v1.yaml
+validation: true
+overrides:
+  llamacpp:
+    server_per_batch: false
+    args: {--slot-prompt-similarity: 0}
+blocks:
+  probe-slots-no-similarity:
+    session: S1
+    engines: [llamacpp]
+    arms: [defaults]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-0.6B, 1], [Qwen/Qwen3-0.6B, 8], [Qwen/Qwen3-0.6B, 64]]
+    captures: {timing: all}

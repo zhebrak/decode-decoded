@@ -1,0 +1,103 @@
+# The smoke grid as it ran with four engines, on an H100 PCIe VM and on the study's H100 SXM VM, kept for those
+# sessions' gates and records after llama.cpp left the study; the smoke
+# grid itself (configs/grid/smoke.yaml) runs three engines now. Its blocks are its own, so it expands the same on the
+# three-engine base.
+extends: configs/grid/v1.yaml
+validation: true
+sentinels:
+  - {engine: vllm, arm: defaults, level: L1, model: Qwen/Qwen3-0.6B, batches: [1]}
+  - {engine: llamacpp, arm: defaults, level: L2, model: Qwen/Qwen3-0.6B, batches: [1], unlocked: true}
+noise:
+  session: SMOKE
+  processes: 2
+  with_sentinels: true
+  cells:
+    small: {engines: [vllm, llamacpp], arms: [defaults], levels: [headline, L2], models: [Qwen/Qwen3-0.6B],
+            batches: [1, 8]}
+    occupancy: {engines: [vllm], arms: [defaults], levels: [headline], models: [Qwen/Qwen3-0.6B], batches: [1],
+                captures: {graph: all}}   # the noise block's graph traces: occupancy's own spread between processes
+blocks:
+  mitigations:   # the arms no other smoke block runs (graphs-off is the anchors', GPU sampling its own block): each
+    session: SMOKE   # engine's scheduler switches, under its image, before S2 runs them at every model
+    engines: [vllm, sglang, trtllm]
+    arms: [async-off, mrv2-off, overlap-off]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-0.6B, 1]]
+    captures: {timing: all}
+  bringup:
+    session: SMOKE
+    engines: [vllm, sglang, trtllm, llamacpp]
+    arms: [defaults]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-0.6B, 1], [Qwen/Qwen3-0.6B, 64]]
+    captures: {timing: all, graph: all, node: all, hostload: all}
+  scale:
+    session: SMOKE
+    engines: [vllm, sglang, trtllm, llamacpp]
+    arms: [defaults]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-0.6B, 256]]
+    captures: {timing: all, node: all}
+  anchors:
+    session: SMOKE
+    engines: [vllm, sglang, trtllm, llamacpp]
+    arms: [graphs-off]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-0.6B, 1]]
+    captures: {timing: all, graph: all}
+  power:         # one cell at the card's power cap: 14B at the KV bound draws the 700 W (the cap held 0.9 of SGLang's
+    session: SMOKE   # busy samples on the pod), so a locked clock log under the cap is read here, by the rule that
+    engines: [sglang]   # judges the lock where nothing slowed the clock (configs/tolerances.yaml clock_lock), before
+    arms: [defaults]    # S1's scale block and S2's large cells rest on it
+    levels: [headline]
+    cells: [[Qwen/Qwen3-14B, max]]
+    captures: {timing: all}
+  served:
+    session: SMOKE
+    engines: [vllm, sglang, trtllm]
+    arms: [defaults]
+    levels: [L2]
+    models: [Qwen/Qwen3-0.6B]
+    batches: [1, 64]
+    captures: {served: all, graph: all}
+  gpu_sampling:
+    session: SMOKE
+    engines: [llamacpp]
+    arms: [gpu-sampling]
+    levels: [L2]
+    models: [Qwen/Qwen3-0.6B]
+    batches: [1, 64]
+    captures: {served: all, graph: all}
+  runner:
+    session: SMOKE
+    engines: [sglang, llamacpp]
+    arms: [defaults]
+    levels: [L0]
+    models: [Qwen/Qwen3-0.6B]
+    batches: [1, 64]
+    captures: {runner: all}
+  long_context:
+    session: SMOKE
+    context: {prompt_len: 8064, gen_len: 288}
+    engines: [vllm, sglang, trtllm, llamacpp]
+    arms: [defaults]
+    levels: [headline]
+    models: [Qwen/Qwen3-0.6B]
+    batches: [1, 8]
+    captures: {timing: all, graph: all}
+  second_family:
+    session: SMOKE
+    engines: [vllm, sglang]
+    arms: [defaults]
+    levels: [headline]
+    models: [unsloth/Llama-3.2-1B-Instruct]
+    batches: [1, 64]
+    captures: {timing: all, graph: all}
+  dram:
+    session: SMOKE
+    engines: [vllm, sglang]
+    arms: [defaults]
+    levels: [headline]
+    models: [Qwen/Qwen3-0.6B]
+    batches: [1, 64]
+    captures: {metrics: all}

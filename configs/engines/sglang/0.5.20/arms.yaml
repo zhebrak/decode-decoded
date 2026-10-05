@@ -1,0 +1,35 @@
+# SGLang 0.5.20 (released 2026-09-18). Flags read from source at the v0.5.20 tag and checked
+# against help.txt. args are ServerArgs fields: the offline driver passes them to sgl.Engine, the server gets them as
+# --kebab-case flags (a true boolean is a bare flag, a false one is left out).
+engine: sglang
+version: 0.5.20
+image: lmsysorg/sglang:v0.5.20
+levels: [L0, L1, L2]
+common:
+  args:
+    max_running_requests: 257      # one over the largest batch: at exactly 256, the request being prefilled in chunks
+                                   # keeps its pool slot while it is also counted among the new ones
+                                   # (get_num_allocatable_reqs), the batch reads full at 255, and the 256th waits for the
+                                   # others to finish (0.6B at 256 on the pod: no step time; at 257, 12.72 ms, all 256
+                                   # decoding). Decode graphs still stop at 256, as every engine's
+    chunked_prefill_size: 8192
+    context_length: 8448
+    mem_fraction_static: 0.9
+    disable_radix_cache: true
+    cuda_graph_max_bs_decode: 256  # --cuda-graph-max-bs was removed in 0.5.20
+    stream_interval: 1             # one chunk per token: the cadence estimator's assumption
+    random_seed: 0
+profile:
+  args: {}                         # Engine.start_profile(activities=["CUDA_PROFILER"]) brackets the window
+  nsys: ["--trace-fork-before-exec=true"]
+native_cuda: bundled              # natively (no Docker): its DeepGEMM needs nvcc >= 12.9; its wheels bring CUDA 13.4
+request:                           # sent with every L2 request (AIPerf --extra-inputs, the stream client's body)
+  return_token_ids: true           # each chunk carries its new token ids (serving_completions.py), detokenising still
+arms:
+  defaults: {}                     # overlap scheduler on, decode graphs "full", prefill graphs "breakable"
+  overlap-off:
+    args: {disable_overlap_schedule: true}
+  graphs-off:
+    # not the deprecated --disable-cuda-graph
+    args: {cuda_graph_backend_decode: disabled, cuda_graph_backend_prefill: disabled}
+    anchor: "argmax|ArgMax"              # step anchor without graph launches: greedy argmax, once a step

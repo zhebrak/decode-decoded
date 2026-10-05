@@ -1,0 +1,32 @@
+# vLLM 0.30.0 (released 2026-09-22). Flags read from source at the v0.30.0 tag and checked against
+# help.txt beside this file. args are engine arguments: the offline driver passes them to AsyncEngineArgs, the server
+# gets them as --kebab-case flags (a false boolean becomes --no-<flag>, a mapping becomes JSON).
+engine: vllm
+version: 0.30.0
+image: vllm/vllm-openai:v0.30.0
+levels: [L1, L2]
+common:
+  args:
+    max_num_seqs: 256              # H100 defaults resolve to 1,024: set so every arm and level match
+    max_num_batched_tokens: 8192   # LLM/bench resolve to 16,384 and serve to 8,192 on H100
+    max_model_len: 8448            # the long-context row's 8,064-token prompt + 288 generated + margin
+    gpu_memory_utilization: 0.9
+    enable_prefix_caching: false
+    seed: 0
+profile:                           # added to the arm for an Nsight capture (cudaProfilerStart/Stop in the worker)
+  args:
+    profiler_config: {profiler: cuda}
+  env:
+    VLLM_WORKER_MULTIPROC_METHOD: spawn   # docs/contributing/profiling.md: fork confuses nsys
+request:                           # sent with every L2 request (AIPerf --extra-inputs, the stream client's body)
+  return_token_ids: true           # each chunk carries its token ids: vLLM's API server merges two steps into one chunk
+                                   # when it falls behind, and counting chunks by text read 285 of 288 tokens
+arms:
+  defaults: {}                     # FULL_AND_PIECEWISE graphs, async scheduling on, Model Runner V2 on
+  graphs-off:
+    args: {compilation_config: {cudagraph_mode: NONE}}   # torch.compile fusions kept; --enforce-eager drops them
+    anchor: "argmax|ArgMax"                              # no graph launches: greedy argmax, once a step
+  async-off:
+    args: {async_scheduling: false}
+  mrv2-off:
+    env: {VLLM_USE_V2_MODEL_RUNNER: "0"}   # the V1 runner: deprecated, removed in 0.32

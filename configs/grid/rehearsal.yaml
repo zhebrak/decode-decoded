@@ -1,0 +1,20 @@
+# A rehearsal: the L2 path end to end on a laptop CPU, no GPU spend (llama.cpp's CUDA image falls back to its CPU
+# backend). Exercises the grid runner, the server container, AIPerf, the raw-export reader, cadence and the records,
+# on the study's own bf16 GGUF (scripts/make_gguf.sh Qwen/Qwen3-0.6B makes it here, with Docker).
+#   make rehearse   (python -m anatomy.grid configs/grid/rehearsal.yaml --block rehearsal --run --no-gpu
+#                    --session-id rehearsal-<commit>: a fresh session per commit, so a finished unit from older code
+#                    is never taken as this code's run)
+versions: 2026-09
+gpu: NVIDIA H100 80GB HBM3   # feasibility only
+memory_fraction: 0.9
+max_batch: 256
+port: 18765
+context: {prompt_len: 64, gen_len: 64}
+blocks:
+  rehearsal:
+    engines: [llamacpp]
+    arms: [defaults]
+    levels: [L2]
+    models: [Qwen/Qwen3-0.6B]
+    batches: [1, 4]
+    captures: {served: all}

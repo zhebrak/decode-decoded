@@ -1,0 +1,17 @@
+# The llama-server slot probe (llamacpp-slots.yaml) on the H100 PCIe validation box (configs/grid/validation/pcie.yaml):
+# one server of 64 slots for batches 1, 8 and 64 in turn, the condition a server per batch avoids, run under Docker for
+# the first time (the pod's probes ran natively). validation: true, another card: never study data.
+#   GRID=configs/grid/validation/probes/llamacpp-slots-pcie.yaml scripts/box.sh grid PCIE-<date> S1 --block probe-slots
+extends: configs/grid/validation/pcie.yaml
+validation: true
+overrides:
+  llamacpp:
+    server_per_batch: false
+blocks:
+  probe-slots:
+    session: S1
+    engines: [llamacpp]
+    arms: [defaults]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-0.6B, 1], [Qwen/Qwen3-0.6B, 8], [Qwen/Qwen3-0.6B, 64]]
+    captures: {timing: all}

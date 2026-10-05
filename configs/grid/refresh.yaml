@@ -1,0 +1,16 @@
+# A refresh: on a new release of one engine or more, everything S2 measures for those engines, again, under the new
+# version set: every model and batch of S2's blocks (main, mitigations, served, gpu_sampling, runner), so the page
+# never shows a release partly measured and every comparison stays a same-session pair. anatomy.grid builds it from
+# the base grid's S2 (anatomy.grid.refresh), with the base's sentinels for all four engines: the drift between the
+# refresh and the sessions it is read beside.
+#
+# On a release: scripts/new_release.sh starts its configs; a new configs/versions/<date>.yaml names it; point
+# `versions` there and list the engines that changed; run session R (box.sh grid <id> R with GRID=this file); then
+# `make results` with every session, and the page shows the newest version of each engine
+# (anatomy.metrics.current_versions).
+versions: 2026-09
+refresh:
+  grid: configs/grid/v1.yaml
+  session: S2
+  as: R
+  engines: [vllm]

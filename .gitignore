@@ -1,0 +1,20 @@
+*.pem
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+# AIPerf's venv: a directory under Docker provisioning, a link to its env natively
+.venv-aiperf
+uv.lock.bak
+# raw artifacts live in the HF dataset; a run writes them outside the clone (servebench.results.RAW_ROOT)
+*.nsys-rep
+*.sqlite
+!tests/fixtures/**/*.sqlite
+/site/
+# box.sh's job log and exit status, in the clone on the box
+/job.log
+/exit.code
+
+# tidy's temporary output directories
+.results-tidy-*/

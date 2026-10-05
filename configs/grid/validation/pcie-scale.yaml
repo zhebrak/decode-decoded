@@ -1,0 +1,29 @@
+# S1's scale cells on the H100 PCIe validation box (configs/grid/validation/pcie.yaml), under the engines' images: 32B
+# at the KV bound (16) for the three engine APIs and 14B at its bound (211) for vLLM and TensorRT-LLM (SGLang's ran in
+# the smoke grid's power block). The pod held these natively; whether each image's
+# memory behaviour (torch.compile's cache, the graph pools) holds the same KV at 0.9 of the card is what S1's scale
+# block would otherwise meet first, hours in. llama.cpp is left out: its 32B GGUF is a quarter of an hour's conversion
+# and its binary is the same under Docker as on the pod. validation: true, another card: never study data.
+#   GRID=configs/grid/validation/pcie.yaml scripts/box.sh provision PCIE-<date>   # the card gate and clock are read from
+#                                                                                 # the named file alone, not its base
+#   ssh <box> 'cd ~/decode-anatomy && SESSION=PCIE-<date> scripts/fetch_models.sh Qwen/Qwen3-32B'   # the 32B weights
+#   GRID=configs/grid/validation/pcie-scale.yaml scripts/box.sh grid PCIE-<date> SMOKE --block scale32 --block scale14
+extends: configs/grid/validation/pcie.yaml
+validation: true
+sentinels: []
+noise: null
+blocks:
+  scale32:
+    session: SMOKE
+    engines: [vllm, sglang, trtllm]
+    arms: [defaults]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-32B, max]]
+    captures: {timing: all}
+  scale14:
+    session: SMOKE
+    engines: [vllm, trtllm]
+    arms: [defaults]
+    levels: [headline]
+    cells: [[Qwen/Qwen3-14B, max]]
+    captures: {timing: all}

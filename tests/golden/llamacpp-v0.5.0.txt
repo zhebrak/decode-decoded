@@ -1,0 +1,9 @@
+# llamacpp v0.5.0  image ghcr.io/ggml-org/llama.cpp:full-cuda-v0.5.0
+[defaults L0] /app/llama-batched-bench -m /models/gguf/Qwen3-8B-bf16.gguf -npp 896 -ntg 288 -npl 1,1,1,1,8,8,8,64,64,64,256,256,256 -c 319488 --output-format jsonl -ngl 999 -fa on -b 8192 --seed 0
+[defaults L2] /app/llama-server -m /models/gguf/Qwen3-8B-bf16.gguf --host 127.0.0.1 --port 8000 -np 256 -c 319488 -ngl 999 -fa on -b 8192 --seed 0 --no-webui --metrics --cont-batching --cache-ram 0 --no-cache-idle-slots
+[defaults +profile L2] /app/llama-server -m /models/gguf/Qwen3-8B-bf16.gguf --host 127.0.0.1 --port 8000 -np 256 -c 319488 -ngl 999 -fa on -b 8192 --seed 0 --no-webui --metrics --cont-batching --cache-ram 0 --no-cache-idle-slots
+[graphs-off L0] GGML_CUDA_DISABLE_GRAPHS=1 /app/llama-batched-bench -m /models/gguf/Qwen3-8B-bf16.gguf -npp 896 -ntg 288 -npl 1,1,1,1,8,8,8,64,64,64,256,256,256 -c 319488 --output-format jsonl -ngl 999 -fa on -b 8192 --seed 0
+[graphs-off L2] GGML_CUDA_DISABLE_GRAPHS=1 /app/llama-server -m /models/gguf/Qwen3-8B-bf16.gguf --host 127.0.0.1 --port 8000 -np 256 -c 319488 -ngl 999 -fa on -b 8192 --seed 0 --no-webui --metrics --cont-batching --cache-ram 0 --no-cache-idle-slots
+[graphs-off +profile L2] GGML_CUDA_DISABLE_GRAPHS=1 /app/llama-server -m /models/gguf/Qwen3-8B-bf16.gguf --host 127.0.0.1 --port 8000 -np 256 -c 319488 -ngl 999 -fa on -b 8192 --seed 0 --no-webui --metrics --cont-batching --cache-ram 0 --no-cache-idle-slots
+[gpu-sampling L2] /app/llama-server -m /models/gguf/Qwen3-8B-bf16.gguf --host 127.0.0.1 --port 8000 -np 256 -c 319488 -ngl 999 -fa on -b 8192 --seed 0 --backend-sampling --no-webui --metrics --cont-batching --cache-ram 0 --no-cache-idle-slots
+[gpu-sampling +profile L2] /app/llama-server -m /models/gguf/Qwen3-8B-bf16.gguf --host 127.0.0.1 --port 8000 -np 256 -c 319488 -ngl 999 -fa on -b 8192 --seed 0 --backend-sampling --no-webui --metrics --cont-batching --cache-ram 0 --no-cache-idle-slots

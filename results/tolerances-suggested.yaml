@@ -1,0 +1,101 @@
+# suggested by anatomy.tidy from S1-20261003's noise block, by the rule in configs/tolerances.yaml's header: copy set_from, overlap_model and the four tolerance values above `bands` into it
+set_from: S1-20261003
+step_noise: 0.01
+agree: 0.035
+range_ok: 0.05
+sentinel_drift: 0.039
+bands:
+  step_noise:
+  - 0.002
+  - 0.01
+  agree:
+  - 0.02
+  - 0.05
+  range_ok:
+  - 0.02
+  - 0.05
+  sentinel_drift:
+  - 0.02
+  - 0.05
+overlap_model_evidence:
+  windows: 9
+  informative: 3
+  timer_step_ns: 32
+  truth_spread_ns: 256.02264404296875
+  truth_passes: 3
+  corrected_wins: 0
+  min_gap_ns: 113.5
+  resolution_ns: 256.02264404296875
+  verdict: 'undecided: the windows disagree, or a gap is within the resolution'
+g1_failures:
+- engine: trtllm
+  level: L2
+  statistic: step_noise
+  value: 0.013
+  most: 0.01
+- engine: trtllm
+  level: L2
+  statistic: range_ok
+  value: 0.065
+  most: 0.05
+per_engine:
+- engine: sglang
+  level: L0
+  noise_cells: 3
+  readings: 18
+  step_noise: 0.007
+  agree: null
+  range_ok: 0.01
+  sentinel_drift: 0.021
+- engine: sglang
+  level: L1
+  noise_cells: 9
+  readings: 54
+  step_noise: 0.005
+  agree: 0.01
+  range_ok: 0.01
+  sentinel_drift: 0.015
+- engine: sglang
+  level: L2
+  noise_cells: 3
+  readings: 18
+  step_noise: 0.001
+  agree: 0.015
+  range_ok: 0.015
+  sentinel_drift: 0.003
+- engine: trtllm
+  level: L1
+  noise_cells: 9
+  readings: 54
+  step_noise: 0.01
+  agree: 0.015
+  range_ok: 0.05
+  sentinel_drift: 0.03
+- engine: trtllm
+  level: L2
+  noise_cells: 2
+  readings: 12
+  step_noise: 0.013
+  agree: 0.035
+  range_ok: 0.065
+  sentinel_drift: 0.039
+- engine: vllm
+  level: L1
+  noise_cells: 9
+  readings: 54
+  step_noise: 0.01
+  agree: 0.02
+  range_ok: 0.05
+  sentinel_drift: 0.03
+- engine: vllm
+  level: L2
+  noise_cells: 3
+  readings: 18
+  step_noise: 0.003
+  agree: 0.02
+  range_ok: 0.02
+  sentinel_drift: 0.009
+from:
+  engine_levels: 7
+  noise_cells: 38
+  readings: 228

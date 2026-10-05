@@ -1,0 +1,18 @@
+{
+ "aa": {
+  "processes": {
+   "beyond": 4,
+   "expected": 0.0467,
+   "pairs": 50,
+   "rate": 0.08
+  },
+  "sentinels": {
+   "beyond": 0,
+   "pairs": 2,
+   "rate": 0.0
+  }
+ },
+ "comparisons": 2,
+ "expected_by_chance": 0.0229,
+ "k": 3
+}
